@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christ Connect — Everything at Christ. One Place.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --paper: #FBF7EE;
+      --paper-dim: #F1EADA;
+      --ink: #1B2A4A;
+      --ink-soft: #33445F;
+      --marigold: #F5A623;
+      --marigold-deep: #D4870F;
+      --teal: #2F9C8F;
+      --rose: #C6404A;
+      --cork: #B98756;
+      --cork-dark: #8C6239;
+      --line: rgba(27, 42, 74, 0.14);
+      --display: 'Anton', sans-serif;
+      --body: 'Work Sans', sans-serif;
+      --mono: 'Space Mono', monospace;
+      --radius: 3px;
+    }
+
+    
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    @media (max-width:640px) {
+      .wrap {
+        padding: 0 18px;
+      }
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--marigold-deep);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--marigold);
+      display: inline-block;
+    }
+
+    /* ---------- stamp badge, the recurring signature mark ---------- */
+    .stamp {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.15;
+      padding: 6px;
+      transform: rotate(-9deg);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .stamp::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      opacity: 0.55;
+    }
+
+    .stamp--lost {
+      color: var(--rose);
+    }
+
+    .stamp--found {
+      color: var(--teal);
+    }
+
+    .stamp--event {
+      color: var(--marigold-deep);
+    }
+
+    .stamp--club {
+      color: var(--ink);
+    }
+
+    /* ---------- top bar ---------- */
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--ink);
+      border-bottom: 3px solid var(--marigold);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--marigold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 18px;
+      transform: rotate(-6deg);
+    }
+
+    .brand-name {
+      font-family: var(--display);
+      font-size: 20px;
+      color: var(--paper);
+      letter-spacing: 0.02em;
+    }
+
+    .brand-name span {
+      color: var(--marigold);
+    }
+
+    nav.links {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav.links a {
+      color: var(--paper);
+      opacity: 0.8;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: opacity .15s ease;
+    }
+
+    nav.links a:hover,
+    nav.links a:focus-visible {
+      opacity: 1;
+      color: var(--marigold);
+    }
+
+    .nav-cta {
+      background: var(--marigold);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-family: var(--body);
+    }
+
+    .nav-cta:hover {
+      background: var(--paper);
+    }
+
+    .burger {
+      display: none;
+    }
+
+    @media (max-width:860px) {
+      nav.links {
+        display: none;
+      }
+
+      .burger {
+        display: block;
+        color: var(--paper);
+        font-family: var(--mono);
+        font-size: 12px;
+        border: 1px solid var(--paper);
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: none;
+      }
+    }
+
+    /* ---------- hero / corkboard ---------- */
+    .hero {
+      position: relative;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(255, 255, 255, 0.05), transparent 45%),
+        repeating-linear-gradient(115deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 2px, transparent 2px, transparent 6px),
+        linear-gradient(180deg, var(--cork) 0%, var(--cork-dark) 100%);
+      padding: 76px 0 100px;
+      overflow: hidden;
+      border-bottom: 6px solid var(--ink);
+    }
+
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    @media (max-width:940px) {
+      .hero .wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-copy .eyebrow {
+      color: var(--paper);
+    }
+
+    .hero-copy .eyebrow::before {
+      background: var(--paper);
+    }
+
+    .hero-title {
+      color: var(--paper);
+      font-size: clamp(40px, 6vw, 72px);
+      line-height: 0.98;
+      margin-top: 18px;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.18);
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--marigold);
+    }
+
+    .hero-sub {
+      color: rgba(251, 247, 238, 0.92);
+      font-size: 17px;
+      max-width: 460px;
+      margin-top: 18px;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 26px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform .15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--marigold);
+      outline-offset: 3px;
+    }
+
+    .btn-primary {
+      background: var(--marigold);
+      color: var(--ink);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--paper);
+      border-color: var(--paper);
+    }
+
+    .hero-search {
+      margin-top: 34px;
+      background: var(--paper);
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      gap: 6px;
+      max-width: 480px;
+      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.25);
+    }
+
+    .hero-search input {
+      border: none;
+      background: none;
+      flex: 1;
+      font-family: var(--body);
+      font-size: 14px;
+      padding: 10px 14px;
+      color: var(--ink);
+    }
+
+    .hero-search input:focus {
+      outline: none;
+    }
+
+    .hero-search button {
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      border-radius: 6px;
+      padding: 0 20px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* pinned notes */
+    .board {
+      position: relative;
+      height: 440px;
+    }
+
+    .note {
+      position: absolute;
+      width: 210px;
+      padding: 18px 16px 16px;
+      border-radius: 2px;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+      font-family: var(--body);
+    }
+
+    .note::before {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.4), inset 0 -3px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .note .tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.65;
+    }
+
+    .note h4 {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 17px;
+      margin: 8px 0 6px;
+      line-height: 1.15;
+    }
+
+    .note p {
+      font-size: 12.5px;
+      line-height: 1.4;
+      opacity: 0.85;
+    }
+
+    .note--1 {
+      background: #FFE9A8;
+      color: #4A3600;
+      top: 0;
+      left: 0;
+      transform: rotate(-7deg);
+    }
+
+    .note--2 {
+      background: #FFD3D3;
+      color: #5A1414;
+      top: 26px;
+      left: 200px;
+      transform: rotate(5deg);
+      z-index: 2;
+    }
+
+    .note--3 {
+      background: #D8F1E5;
+      color: #0F3D2E;
+      top: 210px;
+      left: 20px;
+      transform: rotate(4deg);
+    }
+
+    .note--4 {
+      background: #DCE6FF;
+      color: #1B2A4A;
+      top: 236px;
+      left: 230px;
+      transform: rotate(-4deg);
+      z-index: 2;
+    }
+
+    .note--tape {
+      position: absolute;
+      width: 70px;
+      height: 22px;
+      top: -12px;
+      left: 60%;
+      background: rgba(255, 255, 255, 0.55);
+      transform: rotate(-8deg);
+      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width:940px) {
+      .board {
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .note {
+        position: static;
+        width: auto;
+        transform: none !important;
+      }
+    }
+
+    @media (max-width:520px) {
+      .board {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- ticker ---------- */
+    .ticker-strip {
+      background: var(--ink);
+      color: var(--paper);
+      overflow: hidden;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(251, 247, 238, 0.15);
+    }
+
+    .ticker-track {
+      display: inline-flex;
+      gap: 60px;
+      padding: 12px 0;
+      animation: scroll 26s linear infinite;
+    }
+
+    .ticker-track span {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+
+    .ticker-track span b {
+      color: var(--marigold);
+    }
+
+    @keyframes scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track {
+        animation: none;
+      }
+    }
+
+    /* ---------- generic section scaffolding ---------- */
+    section {
+      padding: 88px 0;
+    }
+
+    section.tight {
+      padding: 64px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 20px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      margin-top: 10px;
+    }
+
+    .section-head .view-all {
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 2px solid var(--marigold-deep);
+      padding-bottom: 3px;
+      white-space: nowrap;
+    }
+
+    .alt {
+      background: var(--paper-dim);
+    }
+
+    /* ---------- quick access ---------- */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+
+    @media (max-width:900px) {
+      .quick-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width:520px) {
+      .quick-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .quick-card {
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 10px;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid rgba(251, 247, 238, 0.08);
+      transition: background .15s ease, transform .15s ease;
+    }
+
+    .quick-card:hover {
+      background: #233457;
+      transform: translateY(-3px);
+    }
+
+    .quick-card .ic {
+      font-size: 22px;
+    }
+
+    .quick-card span {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ---------- event cards ---------- */
+    .row-scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scrollbar-width: thin;
+    }
+
+    .event-card {
+      min-width: 260px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 0 var(--ink);
+      flex-shrink: 0;
+    }
+
+    .event-date {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 14px 16px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .event-date .d {
+      font-family: var(--display);
+      font-size: 26px;
+      color: var(--marigold);
+    }
+
+    .event-date .m {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .event-body {
+      padding: 18px 16px 20px;
+    }
+
+    .event-body h4 {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 15.5px;
+      margin-bottom: 8px;
+    }
+
+    .event-body p {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+
+    .event-body .loc {
+      margin-top: 12px;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--teal);
+    }
+
+    /* ---------- club grid ---------- */
+    .club-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width:900px) {
+      .club-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width:520px) {
+      .club-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .club-card {
+      position: relative;
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 10px;
+      padding: 26px 20px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .club-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.9;
+    }
+
+    .club-card.c1::before {
+      background: linear-gradient(155deg, #2F9C8F, #1B2A4A);
+    }
+
+    .club-card.c2::before {
+      background: linear-gradient(155deg, #C6404A, #1B2A4A);
+    }
+
+    .club-card.c3::before {
+      background: linear-gradient(155deg, #F5A623, #8C6239);
+    }
+
+    .club-card.c4::before {
+      background: linear-gradient(155deg, #5C6BC0, #1B2A4A);
+    }
+
+    .club-card.c5::before {
+      background: linear-gradient(155deg, #2F9C8F, #0F3D2E);
+    }
+
+    .club-card.c6::before {
+      background: linear-gradient(155deg, #D4870F, #1B2A4A);
+    }
+
+    .club-card.c7::before {
+      background: linear-gradient(155deg, #C6404A, #5A1414);
+    }
+
+    .club-card.c8::before {
+      background: linear-gradient(155deg, #5C6BC0, #0F3D2E);
+    }
+
+    .club-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.75;
+      margin-bottom: 6px;
+    }
+
+    .club-card h4 {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: 22px;
+    }
+
+    .club-count {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    /* ---------- lost & found ---------- */
+    .lf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+
+    @media (max-width:800px) {
+      .lf-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lf-col-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .lf-col-head h3 {
+      font-size: 26px;
+    }
+
+    .lf-item {
+      display: flex;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .lf-item:last-child {
+      border-bottom: none;
+    }
+
+    .lf-item .thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .lf-item.lost .thumb {
+      background: #FBE4E4;
+    }
+
+    .lf-item.found .thumb {
+      background: #E1F3EE;
+    }
+
+    .lf-item h5 {
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: 14.5px;
+      margin-bottom: 4px;
+    }
+
+    .lf-item p {
+      font-size: 12.5px;
+      color: var(--ink-soft);
+    }
+
+    .lf-item .meta {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--marigold-deep);
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ---------- marketplace / skill exchange ---------- */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    @media (max-width:900px) {
+      .split-grid {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+    }
+
+    .card-row {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mini-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+
+    .mini-card .info h5 {
+      font-size: 14.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .mini-card .info p {
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .price {
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--teal);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .skill-swap {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--marigold-deep);
+      white-space: nowrap;
+    }
+
+    /* ---------- stats ---------- */
+    .stats {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+
+    @media (max-width:700px) {
+      .stat-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .stat-num {
+      font-family: var(--display);
+      font-size: clamp(34px, 5vw, 54px);
+      color: var(--marigold);
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 56px 0 30px;
+      border-top: 6px solid var(--marigold);
+    }
+
+    .foot-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(251, 247, 238, 0.15);
+    }
+
+    @media (max-width:800px) {
+      .foot-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .foot-grid h6 {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--marigold);
+      margin-bottom: 16px;
+    }
+
+    .foot-grid ul li {
+      margin-bottom: 10px;
+      font-size: 13.5px;
+      opacity: 0.85;
+    }
+
+    .foot-grid ul li a:hover {
+      color: var(--marigold);
+    }
+
+    .foot-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      font-size: 12px;
+      opacity: 0.65;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* focus visibility across interactive bits */
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--marigold);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site">
+    <div class="nav">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <div class="brand-name">CHRIST <span>CONNECT</span></div>
+      </div>
+      <nav class="links">
+        <a href="#home">Home</a>
+        <a href="#clubs">Clubs</a>
+        <a href="#events">Events</a>
+        <a href="#lost-found">Lost &amp; Found</a>
+        <a href="#marketplace">Marketplace</a>
+        <a href="#skill-exchange">Skill Exchange</a>
+      </nav>
+      <button class="nav-cta">My Profile</button>
+      <button class="burger">MENU</button>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow">The student life OS</span>
+        <h1 class="hero-title">Everything at<br><em>Christ.</em><br>One place.</h1>
+        <p class="hero-sub">ERP handles your academics. Christ Connect handles everything else — clubs, events, lost
+          items, second-hand textbooks, and the people who can teach you what you don't know yet.</p>
+        <div class="hero-search">
+          <input type="text" placeholder="Search clubs, events, items, listings…"
+            aria-label="Search everything on campus">
+          <button>Search</button>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Explore campus</button>
+          <button class="btn btn-ghost">Post something</button>
+        </div>
+      </div>
+
+      <div class="board" aria-hidden="true">
+        <div class="note note--1">
+          <span class="tag">Event · Nov 12</span>
+          <h4>Cultural Fest — Vibgyor</h4>
+          <p>Auditorium block, 5 PM onward. Registrations close Friday.</p>
+        </div>
+        <div class="note note--2">
+          <div class="note--tape"></div>
+          <span class="tag">Lost · Block 1</span>
+          <h4>Blue backpack</h4>
+          <p>Left near the canteen stairs. Has a physics textbook inside.</p>
+        </div>
+        <div class="note note--3">
+          <span class="tag">Marketplace</span>
+          <h4>Physics textbook — ₹200</h4>
+          <p>2nd edition, barely used, highlights in pencil only.</p>
+        </div>
+        <div class="note note--4">
+          <span class="tag">Skill Exchange</span>
+          <h4>Guitar for Photoshop</h4>
+          <p>3rd-year BA student trading lessons, DM to swap.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker-strip">
+    <div class="ticker-track">
+      <span><b>ANNOUNCEMENT —</b> Hostel mess menu updated for the week</span>
+      <span><b>ANNOUNCEMENT —</b> Entrepreneurship Cell applications open till Aug 2</span>
+      <span><b>ANNOUNCEMENT —</b> Library extended hours during exam week</span>
+      <span><b>ANNOUNCEMENT —</b> Photography Club shortlist out on the notice board</span>
+      <span><b>ANNOUNCEMENT —</b> Hostel mess menu updated for the week</span>
+      <span><b>ANNOUNCEMENT —</b> Entrepreneurship Cell applications open till Aug 2</span>
+      <span><b>ANNOUNCEMENT —</b> Library extended hours during exam week</span>
+      <span><b>ANNOUNCEMENT —</b> Photography Club shortlist out on the notice board</span>
+    </div>
+  </div>
+
+  <section id="quick-access" class="tight">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">Jump back in</span>
+          <h2>Quick access</h2>
+        </div>
+      </div>
+      <div class="quick-grid">
+        <a class="quick-card" href="#"><span class="ic">👤</span><span>My Profile</span></a>
+        <a class="quick-card" href="#"><span class="ic">🛍️</span><span>My Orders</span></a>
+        <a class="quick-card" href="#"><span class="ic">📋</span><span>My Listings</span></a>
+        <a class="quick-card" href="#"><span class="ic">🎒</span><span>My Lost Items</span></a>
+        <a class="quick-card" href="#"><span class="ic">🔔</span><span>Notifications</span></a>
+        <a class="quick-card" href="#"><span class="ic">⚙️</span><span>Settings</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="events" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">Don't miss out</span>
+          <h2>Today &amp; upcoming events</h2>
+        </div>
+        <a class="view-all" href="#">View full calendar →</a>
+      </div>
+      <div class="row-scroll">
+        <div class="event-card">
+          <div class="event-date"><span class="d">19</span><span class="m">Jul · Today</span></div>
+          <div class="event-body">
+            <h4>Open Mic Night — Music Club</h4>
+            <p>Sign up at the mic table by 6 PM. All genres welcome.</p>
+            <div class="loc">Amphitheatre · 7:00 PM</div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-date"><span class="d">22</span><span class="m">Jul</span></div>
+          <div class="event-body">
+            <h4>Startup Pitch Circle</h4>
+            <p>Entrepreneurship Cell's monthly pitch-and-feedback session.</p>
+            <div class="loc">Block 4, Room 212 · 4:30 PM</div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-date"><span class="d">27</span><span class="m">Jul</span></div>
+          <div class="event-body">
+            <h4>Street Photography Walk</h4>
+            <p>Meet at the gate, bring any camera — phones count too.</p>
+            <div class="loc">Main Gate · 8:00 AM</div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-date"><span class="d">02</span><span class="m">Aug</span></div>
+          <div class="event-body">
+            <h4>Inter-Dept Basketball Finals</h4>
+            <p>Commerce vs Psychology. Bring your department colours.</p>
+            <div class="loc">Sports Complex · 5:00 PM</div>
+          </div>
+        </div>
+        <div class="event-card">
+          <div class="event-date"><span class="d">05</span><span class="m">Aug</span></div>
+          <div class="event-body">
+            <h4>Vibgyor Cultural Fest</h4>
+            <p>Three days of performances, stalls, and the big finale concert.</p>
+            <div class="loc">Main Auditorium · All day</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="clubs">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">Find your people</span>
+          <h2>Trending clubs &amp; departments</h2>
+        </div>
+        <a class="view-all" href="#">Explore all clubs →</a>
+      </div>
+      <div class="club-grid">
+        <div class="club-card c1"><span class="club-tag">Technical</span>
+          <h4>Code Club</h4><span class="club-count">340 members</span>
+        </div>
+        <div class="club-card c2"><span class="club-tag">Cultural</span>
+          <h4>Vibgyor</h4><span class="club-count">512 members</span>
+        </div>
+        <div class="club-card c3"><span class="club-tag">Sports</span>
+          <h4>Athletics Club</h4><span class="club-count">280 members</span>
+        </div>
+        <div class="club-card c4"><span class="club-tag">Entrepreneurship</span>
+          <h4>E-Cell</h4><span class="club-count">195 members</span>
+        </div>
+        <div class="club-card c5"><span class="club-tag">Media</span>
+          <h4>Christ Media House</h4><span class="club-count">150 members</span>
+        </div>
+        <div class="club-card c6"><span class="club-tag">Photography</span>
+          <h4>Aperture</h4><span class="club-count">210 members</span>
+        </div>
+        <div class="club-card c7"><span class="club-tag">Dance</span>
+          <h4>Troupe Nine</h4><span class="club-count">160 members</span>
+        </div>
+        <div class="club-card c8"><span class="club-tag">Music</span>
+          <h4>Acoustics</h4><span class="club-count">225 members</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lost-found" class="alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div><span class="eyebrow">Reunite it</span>
+          <h2>Lost &amp; found highlights</h2>
+        </div>
+        <a class="view-all" href="#">Report an item →</a>
+      </div>
+      <div class="lf-grid">
+        <div>
+          <div class="lf-col-head">
+            <div class="stamp stamp--lost">LOST</div>
+            <h3>Recently lost</h3>
+          </div>
+          <div class="lf-item lost">
+            <div class="thumb">🎒</div>
+            <div>
+              <h5>Blue backpack</h5>
+              <p>Canteen stairs, Block 1 — physics textbook inside.</p>
+              <div class="meta">Reported 2 hours ago</div>
+            </div>
+          </div>
+          <div class="lf-item lost">
+            <div class="thumb">🔑</div>
+            <div>
+              <h5>Hostel room keys</h5>
+              <p>Somewhere between the library and Block 3.</p>
+              <div class="meta">Reported yesterday</div>
+            </div>
+          </div>
+          <div class="lf-item lost">
+            <div class="thumb">🎧</div>
+            <div>
+              <h5>Wired earphones, black</h5>
+              <p>Left in the auditorium during the seminar.</p>
+              <div class="meta">Reported 2 days ago</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="lf-col-head">
+            <div class="stamp stamp--found">FOUND</div>
+            <h3>Recently found</h3>
+          </div>
+          <div class="lf-item found">
+            <div class="thumb">📘</div>
+            <div>
+              <h5>Notebook, name "Ananya"</h5>
+              <p>Handed in at the Block 2 reception desk.</p>
+              <div class="meta">Found today</div>
+            </div>
+          </div>
+          <div class="lf-item found">
+            <div class="thumb">☂️</div>
+            <div>
+              <h5>Grey umbrella</h5>
+              <p>Left outside the cafeteria during yesterday's rain.</p>
+              <div class="meta">Found yesterday</div>
+            </div>
+          </div>
+          <div class="lf-item found">
+            <div class="thumb">💳</div>
+            <div>
+              <h5>Student ID card</h5>
+              <p>Picked up near the sports complex entrance.</p>
+              <div class="meta">Found 3 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="marketplace">
+    <div class="wrap">
+      <div class="split-grid">
+        <div>
+          <div class="section-head" style="border-bottom:none; padding-bottom:0; margin-bottom:26px;">
+            <div><span class="eyebrow">Buy &amp; sell</span>
+              <h2>Student marketplace</h2>
+            </div>
+          </div>
+          <div class="card-row">
+            <div class="mini-card">
+              <div class="info">
+                <h5>Scientific calculator</h5>
+                <p>FX-991ES, works perfectly</p>
+              </div>
+              <div class="price">₹450</div>
+            </div>
+            <div class="mini-card">
+              <div class="info">
+                <h5>Study table lamp</h5>
+                <p>Adjustable, USB powered</p>
+              </div>
+              <div class="price">₹300</div>
+            </div>
+            <div class="mini-card">
+              <div class="info">
+                <h5>Cycle — Hercules</h5>
+                <p>Well maintained, 2 years old</p>
+              </div>
+              <div class="price">₹2,800</div>
+            </div>
+            <div class="mini-card">
+              <div class="info">
+                <h5>Semester 3 textbook set</h5>
+                <p>Commerce core papers, complete</p>
+              </div>
+              <div class="price">₹900</div>
+            </div>
+          </div>
+        </div>
+        <div id="skill-exchange">
+          <div class="section-head" style="border-bottom:none; padding-bottom:0; margin-bottom:26px;">
+            <div><span class="eyebrow">Teach one, learn one</span>
+              <h2>Skill exchange</h2>
+            </div>
+          </div>
+          <div class="card-row">
+            <div class="mini-card">
+              <div class="info">
+                <h5>Guitar basics ⇄ Photoshop</h5>
+                <p>3rd-year BA · trades lessons weekly</p>
+              </div>
+              <div class="skill-swap">Swap</div>
+            </div>
+            <div class="mini-card">
+              <div class="info">
+                <h5>Excel &amp; formulas ⇄ Badminton coaching</h5>
+                <p>Commerce final year</p>
+              </div>
+              <div class="skill-swap">Swap</div>
+            </div>
+            <div class="mini-card">
+              <div class="info">
+                <h5>Spanish conversation ⇄ Video editing</h5>
+                <p>Open to any department</p>
+              </div>
+              <div class="skill-swap">Swap</div>
+            </div>
+            <div class="mini-card">
+              <div class="info">
+                <h5>Public speaking ⇄ Sketching</h5>
+                <p>Psychology, 2nd year</p>
+              </div>
+              <div class="skill-swap">Swap</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap">
+      <div class="section-head" style="border-bottom:1px solid rgba(251,247,238,0.2); margin-bottom:44px;">
+        <div><span class="eyebrow" style="color:var(--marigold);">On campus right now</span>
+          <h2>Campus at a glance</h2>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div>
+          <div class="stat-num">12,400+</div>
+          <div class="stat-label">Students connected</div>
+        </div>
+        <div>
+          <div class="stat-num">86</div>
+          <div class="stat-label">Active clubs</div>
+        </div>
+        <div>
+          <div class="stat-num">240</div>
+          <div class="stat-label">Events this month</div>
+        </div>
+        <div>
+          <div class="stat-num">610</div>
+          <div class="stat-label">Items reunited</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div class="brand" style="margin-bottom:14px;">
+            <div class="brand-mark">C</div>
+            <div class="brand-name">CHRIST <span>CONNECT</span></div>
+          </div>
+          <p style="font-size:13.5px; opacity:0.75; max-width:280px; line-height:1.6;">The student life operating system
+            for Christ University. ERP runs your academics — this runs everything else.</p>
+        </div>
+        <div>
+          <h6>Explore</h6>
+          <ul>
+            <li><a href="#clubs">Clubs &amp; departments</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#marketplace">Marketplace</a></li>
+            <li><a href="#skill-exchange">Skill exchange</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6>Account</h6>
+          <ul>
+            <li><a href="#">My profile</a></li>
+            <li><a href="#">My listings</a></li>
+            <li><a href="#">Saved events</a></li>
+            <li><a href="#">Notifications</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6>Support</h6>
+          <ul>
+            <li><a href="#">Report a lost item</a></li>
+            <li><a href="#">Report a found item</a></li>
+            <li><a href="#">Contact student council</a></li>
+            <li><a href="#">Help centre</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Christ Connect · Built by students, for students.</span>
+        <span>Not affiliated with the official Christ University ERP or KP Portal.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
