@@ -1,3 +1,42 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Student Login · Christ Connect</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head>
-<body class="portal-body"><main class="login-shell"><a class="brand" href="index.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><section class="login-card"><p class="eyebrow">STUDENT-ONLY ACCESS</p><h1>Your campus, <em>in one place.</em></h1><p>Access attendance, registered events, your club memberships, library information, academic calendar and canteen pre-orders.</p><form id="loginForm" novalidate><label for="registrationNumber">CHRIST registration number</label><input id="registrationNumber" name="registrationNumber" autocomplete="username" placeholder="Enter your registration number" required><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button type="submit">Secure sign in →</button><p class="login-message" id="loginMessage" role="status"></p></form><div class="security-note"><b>How access is protected</b><span>Only registration numbers provisioned by the university database can sign in. A registration number alone is never enough: password hashing, verified email/OTP and server-side access checks are required before real student data is enabled.</span></div></section><p class="portal-foot">Not a student yet? <a href="https://ncr.christuniversity.in/admission-home" target="_blank" rel="noopener">View admissions ↗</a> · <a href="index.html">Back to campus guide</a></p></main><script src="portal.js"></script></body></html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login · Christ Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="portal-body">
+    <main class="login-shell"><a class="brand" href="index.html"><span
+                class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a>
+        <section class="login-card">
+            <p class="eyebrow">STUDENT-ONLY ACCESS</p>
+            <h1>Your campus, <em>in one place.</em></h1>
+            <p>Access attendance, registered events, your club memberships, library information, academic calendar and
+                canteen pre-orders.</p>
+            <form id="loginForm" novalidate><label for="registrationNumber">CHRIST registration number</label><input
+                    id="registrationNumber" name="registrationNumber" autocomplete="username"
+                    placeholder="Enter your registration number" required><label for="password">Password</label><input
+                    id="password" name="password" type="password" autocomplete="current-password"
+                    placeholder="Enter your password" required><button type="submit">Secure sign in →</button>
+                <p class="login-message" id="loginMessage" role="status"></p>
+            </form>
+            <div class="security-note"><b>How access is protected</b><span>Only registration numbers provisioned by the
+                    university database can sign in. A registration number alone is never enough: password hashing,
+                    verified email/OTP and server-side access checks are required before real student data is
+                    enabled.</span></div>
+        </section>
+        <p class="portal-foot">Not a student yet? <a href="https://ncr.christuniversity.in/admission-home"
+                target="_blank" rel="noopener">View admissions ↗</a> · <a href="index.html">Back to campus guide</a></p>
+    </main>
+    <script src="portal.js"></script>
+</body>
+
+</html>
