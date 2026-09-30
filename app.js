@@ -27,8 +27,23 @@ function initThree(){
     coords.forEach(([x,h,z,s],i)=>{const b=new THREE.Mesh(new THREE.BoxGeometry(s,h,s),mat(colors[i%colors.length]));b.position.set(x,h/2-0.8,z);b.rotation.y=(i*.3);group.add(b);});
     for(let i=0;i<18;i++){const tree=new THREE.Mesh(new THREE.ConeGeometry(.18,.6,10),mat(0x6f8e6a));tree.position.set(Math.sin(i*1.7)*4.2,.1,Math.cos(i*1.4)*4.2);group.add(tree)}
     const ring=new THREE.Mesh(new THREE.TorusGeometry(3.6,.035,8,96),new THREE.MeshBasicMaterial({color:0xe96447,transparent:true,opacity:.55}));ring.rotation.x=Math.PI/2;ring.position.y=-.72;group.add(ring);
-    let tx=0,ty=0;addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*.35;ty=(e.clientY/innerHeight-.5)*.25},{passive:true});
-    let t=0;(function animate(){t+=.005;group.rotation.y+=(tx-group.rotation.y)*.025;group.rotation.x+=(ty-group.rotation.x)*.02;group.position.y=Math.sin(t)*.08;renderer.render(scene,camera);requestAnimationFrame(animate)})();
+    // Cursor-tracking: the whole campus turns toward the pointer, a glowing beacon + spotlight follow it, and the tallest tower leans toward it.
+    const beacon=new THREE.Mesh(new THREE.SphereGeometry(.16,24,24),new THREE.MeshBasicMaterial({color:0xe96447}));scene.add(beacon);
+    const halo=new THREE.Mesh(new THREE.RingGeometry(.3,.38,48),new THREE.MeshBasicMaterial({color:0xe96447,transparent:true,opacity:.5,side:THREE.DoubleSide}));halo.rotation.x=-Math.PI/2;scene.add(halo);
+    const spot=new THREE.PointLight(0xe96447,18,9);scene.add(spot);
+    const tower=group.children[2]; const tower0=tower.rotation.y;
+    let nx=0,ny=0,px=0,py=0,cx=0,cy=0;
+    addEventListener('pointermove',e=>{nx=(e.clientX/innerWidth-.5)*2;ny=(e.clientY/innerHeight-.5)*2},{passive:true});
+    // custom cursor ring (desktop only)
+    if(matchMedia('(pointer:fine)').matches){const c=document.createElement('div');c.style.cssText='position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid #e96447;border-radius:50%;pointer-events:none;z-index:999;transition:width .2s,height .2s,margin .2s,background .2s';document.body.appendChild(c);
+      addEventListener('pointermove',e=>{c.style.transform=`translate(${e.clientX}px,${e.clientY}px)`});
+      document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('pointerenter',()=>{c.style.width=c.style.height='54px';c.style.margin='-27px 0 0 -27px';c.style.background='#e9644718'});el.addEventListener('pointerleave',()=>{c.style.width=c.style.height='34px';c.style.margin='-17px 0 0 -17px';c.style.background='none'})});}
+    let t=0;(function animate(){t+=.008;px+=(nx-px)*.06;py+=(ny-py)*.06;
+      group.rotation.y+=((px*.7)-group.rotation.y)*.06; group.rotation.x+=((py*.3)-group.rotation.x)*.06;
+      camera.position.x=7+px*1.2;camera.position.y=6-py*.9;camera.lookAt(0,.3,0);
+      const gx=px*3.6,gz=py*3.6; beacon.position.set(gx,-.45+Math.sin(t*4)*.08,gz);halo.position.set(gx,-.7,gz);halo.scale.setScalar(1+Math.sin(t*4)*.15);spot.position.set(gx,1.2,gz);
+      tower.rotation.z+=((-px*.12)-tower.rotation.z)*.08; tower.rotation.x+=((py*.12)-tower.rotation.x)*.08;
+      group.position.y=Math.sin(t)*.08;renderer.render(scene,camera);requestAnimationFrame(animate)})();
   };document.head.appendChild(script);
 }
 initThree();

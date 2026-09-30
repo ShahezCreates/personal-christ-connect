@@ -73,3 +73,9 @@ The project contains demo events, clubs and attendance values only. Replace them
 - Delhi NCR-only organization/school directory data.
 - Generic photography providers were removed from the active landing/login UI; active photography points to Delhi NCR campus gallery images.
 - Existing Edge Functions are intentionally unchanged.
+
+## V5 additions
+- Run `supabase/upgrade_v4.sql` after v3. Adds prepaid wallet + ledger, server-enforced 2-minute cancel window with refund, registration-number-stamped e-receipts (`get_order_receipt`), admin-only top-up (`admin_topup_wallet`).
+- `canteen.js`: wallet balance, live cancel countdown, on-site e-receipt.
+- `app.js`: landing 3D campus now tracks the cursor (beacon, spotlight, leaning tower, custom cursor).
+- `academic-calendar.html`: embeds the official 2026-27 calendar page.
