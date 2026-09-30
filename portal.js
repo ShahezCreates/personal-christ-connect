@@ -15,9 +15,10 @@ form.addEventListener("submit", async (e) => {
       throw new Error("config");
    const r = await fetch(`${c.SUPABASE_URL}/functions/v1/login-with-registration`, {
     method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
+ headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${c.SUPABASE_ANON_KEY}`
+},
     body: JSON.stringify({
         registrationNumber,
         password
