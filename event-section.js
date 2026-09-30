@@ -1,19 +1,110 @@
-const key=document.body.dataset.eventPage||'events';
-const items=[
- ['PLACETRIALS 2026','School of Sciences','Current Delhi NCR campus activity feed','green'],
- ['TARANG 2026','School of Sciences','Current Delhi NCR campus activity feed','yellow'],
- ['WORKSHOP ON ADVANCED EXCEL','School of Commerce, Finance and Accountancy','Current Delhi NCR campus activity feed','blue'],
- ['ENNOVERSE 2.0','Department of Psychology','Current Delhi NCR campus activity feed','coral'],
- ['CARNIFEST 4.0','CAPS','Current Delhi NCR campus activity feed','yellow'],
- ['THE ART & SCIENCE OF CINEMATIC LIGHTING','CDL','Current Delhi NCR campus activity feed','green'],
- ['CHANGE OF GUARD CEREMONY','NCC','Current Delhi NCR campus activity feed','coral'],
- ['THEATRE WORKSHOP','School of Psychological Sciences','Current Delhi NCR campus activity feed','blue'],
- ['STARTUP STORIES-MARKETING CLUB EVENT','School of Business and Management','Current Delhi NCR campus activity feed','green'],
- ['FINALYTICS CLUB EVENT','School of Business and Management','Current Delhi NCR campus activity feed','yellow'],
- ['PUBLIC POLICY FORMULATION WORKSHOP','School of Social Sciences','Current Delhi NCR campus activity feed','coral'],
- ['INTRODUCTORY MOOTING WORKSHOP 2026','School of Law','Current Delhi NCR campus activity feed','blue']
-];
-const pageNames={events:'All <em>events.</em>',today:'Today’s <em>events.</em>',week:'This <em>week.</em>',upcoming:'Upcoming <em>events.</em>',workshops:'Workshops.',hackathons:'Hackathons.',competitions:'Competitions.',lectures:'Guest <em>lectures.</em>',fests:'Cultural <em>fests.</em>',sports:'Sports.',department:'Department <em>events.</em>',club:'Club <em>events.</em>',registration:'Event <em>registration.</em>',countdown:'Event <em>countdown.</em>',calendar:'Calendar <em>view.</em>'};
-const special={calendar:`<div class="student-card" style="padding:24px"><p class="eyebrow">OFFICIAL</p><h2>Academic Calendar 2026–27</h2><p class="muted">Use the university-published Delhi NCR calendar.</p><a class="action" href="academic-calendar.html">Open academic calendar →</a></div>`,countdown:`<div class="counter"><p>NEXT FEATURE</p><h2>Delhi NCR campus activity</h2><strong>LIVE</strong><p>Current activity is refreshed from the university's public campus feed.</p></div>`,registration:`<div class="student-card" style="padding:26px"><p class="eyebrow">EVENT REGISTRATION</p><h2>Register from the official event source.</h2><p class="muted">Christ Connect keeps current Delhi NCR event names visible and can link you to registration when an official registration URL is available.</p><a class="action" href="https://ncr.christuniversity.in/" target="_blank" rel="noreferrer">Open official campus site ↗</a></div>`};
-const html=`<header><a class="brand" href="index.html"><span class="brand-mark">C</span> CHRIST CONNECT</a><a href="index.html">← Home</a></header><main class="wrap"><div class="head"><p class="eyebrow">DELHI NCR · CURRENT CAMPUS ACTIVITY</p><h1>${pageNames[key]||pageNames.events}</h1></div>${special[key]||`<div class="grid">${items.map(x=>`<article class="event tilt reveal"><div class="art ${x[3]}">${x[0].slice(0,1)}</div><div class="info"><small>${x[1]}</small><h3>${x[0]}</h3><p class="muted">${x[2]}. Dates, times and registration actions stay with the official source rather than invented in this app.</p><a class="action" href="https://ncr.christuniversity.in/" target="_blank" rel="noreferrer">Verify / explore ↗</a></div></article>`).join('')}</div>`}</main>`;document.body.innerHTML=html;document.body.insertAdjacentHTML('beforeend','<div class="toast" id="toast"></div>');
-const toast=document.querySelector('#toast');document.querySelectorAll('.action').forEach(b=>b.addEventListener('click',()=>{toast.textContent='Opening Delhi NCR source';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1200)}));document.querySelectorAll('.tilt').forEach(el=>el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;el.style.transform=`perspective(900px) rotateX(${-y*4}deg) rotateY(${x*6}deg) translateY(-3px)`}));
+
+(async () => {
+  const auth = await window.CC_AUTH_READY;
+  if (!auth?.session) return;
+  const key = document.body.dataset.eventPage || 'events';
+  const cfg = window.CHRIST_CONNECT_CONFIG;
+  const esc = window.CC_DB?.esc || (v => String(v ?? ''));
+  const api = async (path, opts={}) => window.CC_DB ? CC_DB.rest(path, opts) : null;
+  const titleMap = {
+    events:'Campus <em>events.</em>', today:'Today on <em>campus.</em>', week:'This <em>week.</em>',
+    upcoming:'Upcoming <em>events.</em>', workshops:'Workshops <em>& learning.</em>',
+    hackathons:'Hackathons <em>& building.</em>', competitions:'Competitions <em>& fests.</em>',
+    lectures:'Guest <em>lectures.</em>', fests:'Cultural <em>life.</em>',
+    sports:'Sports <em>& games.</em>', department:'Department <em>events.</em>',
+    club:'Club <em>events.</em>', registration:'Event <em>registration.</em>',
+    countdown:'Event <em>countdown.</em>', calendar:'Campus <em>calendar.</em>'
+  };
+
+  const classify = e => {
+    const text = `${e.title} ${e.description || ''}`.toLowerCase();
+    if (/hack|startup|ai|code|tech|innovation/.test(text)) return 'hackathon';
+    if (/workshop|masterclass|training|lab/.test(text)) return 'workshop';
+    if (/sport|football|basketball|cricket|athletics/.test(text)) return 'sports';
+    if (/festival|fest|cultur|music|dance|theatre|cinema/.test(text)) return 'cultural';
+    if (/lecture|seminar|conference|research|paper|symposium/.test(text)) return 'academic';
+    if (/club|society/.test(text)) return 'club';
+    if (/department|school/.test(text)) return 'department';
+    return 'campus';
+  };
+
+  const now = new Date();
+  let events = [];
+  try {
+    events = await api('events?select=id,title,description,starts_at,ends_at,location,capacity,published&published=eq.true&order=starts_at.asc&limit=100') || [];
+  } catch (e) {
+    console.error(e);
+  }
+
+  const inDays = (d, days) => (new Date(d) - now) <= days * 86400000;
+  let list = events.filter(e => new Date(e.starts_at) >= now);
+
+  if (key === 'today') list = list.filter(e => new Date(e.starts_at).toDateString() === now.toDateString());
+  if (key === 'week') list = list.filter(e => inDays(e.starts_at, 7));
+  if (key === 'upcoming') list = list;
+  if (key === 'workshops') list = list.filter(e => classify(e) === 'workshop');
+  if (key === 'hackathons') list = list.filter(e => classify(e) === 'hackathon');
+  if (key === 'competitions') list = list.filter(e => /competition|contest|challenge|fest/i.test(`${e.title} ${e.description || ''}`));
+  if (key === 'lectures') list = list.filter(e => classify(e) === 'academic');
+  if (key === 'fests') list = list.filter(e => classify(e) === 'cultural');
+  if (key === 'sports') list = list.filter(e => classify(e) === 'sports');
+  if (key === 'department') list = list.filter(e => classify(e) === 'department');
+  if (key === 'club') list = list.filter(e => classify(e) === 'club');
+
+  const html = `
+    <header class="cc-live-header">
+      <a class="brand" href="index.html"><span>C</span> CHRIST CONNECT</a>
+      <div>
+        <a href="dashboard.html">← My space</a>
+        <a href="calendar-view.html">Calendar</a>
+      </div>
+    </header>
+    <main class="cc-live-shell">
+      <section class="cc-live-hero">
+        <div>
+          <p class="eyebrow">DELHI NCR CAMPUS · LIVE DATA</p>
+          <h1>${titleMap[key] || titleMap.events}</h1>
+          <p>These event cards are loaded from the Christ Connect PostgreSQL database for your authenticated student session.</p>
+        </div>
+        <a class="cc-live-pill" href="https://ncr.christuniversity.in/" target="_blank" rel="noopener">Official campus site ↗</a>
+      </section>
+      <section class="cc-event-list">
+        ${list.length ? list.map((e,i) => `
+          <article class="cc-event-row">
+            <div class="num">${String(i+1).padStart(2,'0')}</div>
+            <div class="event-main">
+              <small>${classify(e).toUpperCase()} · ${new Date(e.starts_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</small>
+              <h2>${esc(e.title)}</h2>
+              <p>${esc(e.description || 'Campus event') }</p>
+              <div class="meta"><span>⌖ ${esc(e.location || 'Delhi NCR Campus')}</span><span>◷ ${new Date(e.starts_at).toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'})}</span></div>
+            </div>
+            <button class="cc-event-save" data-event="${e.id}">Save to my events</button>
+          </article>
+        `).join('') : `<div class="cc-empty"><h2>No matching events yet.</h2><p>When published Delhi NCR events are added to the database, this page updates automatically.</p></div>`}
+      </section>
+    </main>
+    <div class="cc-toast" id="ccToast"></div>`;
+  document.body.innerHTML = html;
+
+  const toast = document.querySelector('#ccToast');
+  document.querySelectorAll('[data-event]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      try {
+        const eventId = btn.dataset.event;
+        const existing = await api(`event_registrations?select=event_id&event_id=eq.${encodeURIComponent(eventId)}&limit=1`);
+        if (existing?.length) {
+          await api(`event_registrations?event_id=eq.${encodeURIComponent(eventId)}&student_id=eq.${encodeURIComponent(auth.session.user.id)}`,{method:'DELETE'});
+          btn.textContent = 'Removed';
+        } else {
+          await api('event_registrations',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({student_id:auth.session.user.id,event_id:eventId})});
+          btn.textContent = 'Saved ✓';
+        }
+        toast.textContent = btn.textContent === 'Saved ✓' ? 'Added to your events.' : 'Removed from your events.';
+        toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),1800);
+      } catch(e) {
+        toast.textContent = e.message || 'Could not update event.';
+        toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),2200);
+      }
+    });
+  });
+})();

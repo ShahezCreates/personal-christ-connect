@@ -1,61 +1,72 @@
-# Christ Connect V5 feature map
+# Christ Connect feature map
 
-## Public campus experience
-- Cinematic scrollytelling landing page
-- Pointer-follow 3D campus scene
-- Scroll progress
-- Official Delhi NCR photography
-- Academic schools directory
-- University body / centre directory
-- Current Delhi NCR activity feed labels
-- Dining outlet explorer
-- Academic calendar link/embed
-- Live campus map + directions
-- Official social hub links
+## Original feature set restored
 
-## Private student experience
-- Registration-number + password sign-in through the existing Supabase Edge Function
-- Supabase Auth session persistence across revisits
-- Dashboard
-- Profile tabs
-- Student identity / academic details
-- Subject-wise attendance
-- Attendance what-if calculator
-- Skills / interests
-- Clubs and bodies
-- Event registrations
-- Order history
-- Lost & Found activity
-- Notifications
-- Preferences
+### Home / information
+- `index.html`
+- `christ-connect.html`
+- `campus-guide.html`
+- `department.html`
+- `year.html`
+- `basic-details.html`
 
-## Dining
-- Punjabi Bites
-- Southern Delights
-- Taste of Dilli
-- Rolls Lane
-- Bites & Brews
-- Steaming Mugs
-- Giani's Ice Cream
-- Domino's
-- Fresheteria
-- Cafe Coffee Day
-- Distinct outlet menus
-- Pickup date / slot
-- Prepaid order contract
-- Receipt code
-- Server-side price calculation
-- 2-minute cancellation window enforced by RPC
-- Student-scoped order history
+### Events
+- `events.html`
+- `today-events.html`
+- `this-week.html`
+- `upcoming-events.html`
+- `workshops.html`
+- `hackathons.html`
+- `competitions.html`
+- `guest-lectures.html`
+- `cultural-fests.html`
+- `sports-events.html`
+- `department-events.html`
+- `club-events.html`
+- `event-registration.html`
+- `event-countdown.html`
+- `calendar-view.html`
+- `saved-events.html`
 
-## Lost & Found
-- Search / filter
-- Report lost
-- Report found
-- Open-item browser
-- Claim with proof message
-- Owner-only visibility of claims
-- Notification on new claim
+### Communities / student life
+- `clubs-joined.html`
+- `skill-exchange.html`
+- `skills.html`
+- `interests.html`
+- `community.html`
+- `rewards.html`
 
-## Original Christ Connect features kept
-Events, Today, This Week, Upcoming Events, Workshops, Hackathons, Competitions, Guest Lectures, Cultural Fests, Sports Events, Department Events, Club Events, Event Registration, Event Countdown, Calendar View, Skill Exchange, Marketplace, Lost & Found, Community, Campus Guide, Rewards, Notifications, Admin, Saved Events, Wishlist, My Listings, My Orders, My Lost Items, My Found Items, Skills, Interests, Basic Details, Department, Year.
+### Marketplace / lost & found
+- `marketplace.html`
+- `my-listings.html`
+- `my-orders.html`
+- `wishlist.html`
+- `lost-found.html`
+- `my-lost-items.html`
+- `my-found-items.html`
+
+### Account / admin
+- `portal.html`
+- `dashboard.html`
+- `profile.html`
+- `notifications.html`
+- `notifications-center.html`
+- `settings.html`
+- `admin-dashboard.html`
+- `registration.html`
+
+## V2 private enhancements
+
+- Registration-number login backed by Supabase Auth.
+- RLS-protected student profile and attendance data.
+- Subject-wise attendance cards.
+- Attendance what-if calculator with target percentage.
+- Attendance percentage-point delta after future attendance/absence.
+- Safe-miss and target-recovery calculations.
+- Dynamic student profile, programme, school, department, batch and status.
+- Persistent skills/interests/preferences.
+- Supabase-backed joined clubs, saved events and notifications.
+- Scrollytelling landing page with parallax and progress indicator.
+- Glassmorphism and neumorphism.
+- Local SVG illustrations plus remote photography fallbacks.
+- Optional Three.js 3D campus scene with pointer interaction.

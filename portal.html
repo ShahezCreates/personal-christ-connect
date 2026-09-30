@@ -1,22 +1,66 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Login · Christ Connect</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="deluxe.css"></head>
-<body class="portal-body">
-<div class="portal-bg"><div class="portal-grid"></div><div class="portal-blob one"></div><div class="portal-blob two"></div></div>
-<main class="portal-shell">
-  <a class="portal-brand" href="index.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b><small>PRIVATE STUDENT PORTAL</small></span></a>
-  <section class="portal-grid-main">
-    <div class="portal-story"><p class="eyebrow">DELHI NCR · STUDENT ACCESS</p><h1>One campus.<br><em>Your space.</em></h1><p>Registration number in. Your academic life, campus services, events, attendance and profile out.</p><div class="portal-photo"><img src="https://farm66.staticflickr.com/65535/55239541951_573167cbeb_b.jpg" alt="CHRIST Delhi NCR campus building"></div><div class="data-chip"><span class="status-dot"></span> Delhi NCR only · Mariam Nagar · Ghaziabad</div></div>
-    <section class="login-card glass-card tilt">
-      <p class="eyebrow">SECURE STUDENT PORTAL</p><h2>Welcome <em>back.</em></h2><p class="muted">Use the registration number and password provisioned for your student account.</p>
-      <form id="loginForm" novalidate>
-        <label>Registration number<input id="registrationNumber" name="registrationNumber" placeholder="e.g. 24BCA10001" autocomplete="username" required></label>
-        <label>Password<input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" required></label>
-        <button class="btn primary login-btn" type="submit">Secure sign in <span>→</span></button>
-        <p id="loginMessage" class="login-message-inline" role="status"></p>
-      </form>
-      <div class="security-note"><b>Secure by design</b><p>Passwords are verified by Supabase Auth. Student records are protected with PostgreSQL Row Level Security. Credentials are never stored in browser code.</p></div>
-    </section>
-  </section>
-  <footer class="portal-foot">Need admission information? <a href="https://ncr.christuniversity.in/admission-home" target="_blank" rel="noreferrer">Official admissions ↗</a><span>·</span><a href="index.html">Back to campus</a></footer>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="auth.js"></script><script src="deluxe.js"></script><script src="portal.js"></script>
-</body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Login · Christ Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="portal.css" />
+  </head>
+  <body class="portal-body">
+    <main class="login-shell">
+      <a class="brand" href="index.html"
+        ><span class="brand-mark">C</span
+        ><span>CHRIST<br /><b>CONNECT</b></span></a
+      >
+      <section class="login-card">
+        <p class="eyebrow">PRIVATE STUDENT PORTAL</p>
+        <h1>Your campus,<br /><em>in one place.</em></h1>
+        <p>
+          Sign in with the registration number and password provisioned for your
+          student account.
+        </p>
+        <form id="loginForm" novalidate>
+          <label for="registrationNumber">REGISTRATION NUMBER</label
+          ><input
+            id="registrationNumber"
+            name="registrationNumber"
+            autocomplete="username"
+            placeholder="e.g. 24BCA10001"
+            required
+          /><label for="password">PASSWORD</label
+          ><input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Your password"
+            required
+          /><button type="submit">Secure sign in →</button>
+          <p class="login-message" id="loginMessage" role="status"></p>
+        </form>
+        <div class="security-note">
+          <b>Secure by design</b
+          ><span
+            >Passwords are verified by Supabase Auth. Student tables are
+            protected by PostgreSQL Row Level Security. No password is stored in
+            the frontend.</span
+          >
+        </div>
+      </section>
+      <p class="portal-foot">
+        Need admission information?
+        <a href="https://ncr.christuniversity.in/admission-home" target="_blank"
+          >Official admissions ↗</a
+        >
+        · <a href="index.html">Back home</a>
+      </p>
+    </main>
+    <script src="config.js"></script><script src="auth.js"></script>
+    <script src="portal.js"></script>
+  </body>
+</html>

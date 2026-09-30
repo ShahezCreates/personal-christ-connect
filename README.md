@@ -1,40 +1,87 @@
-# Christ Connect · Delhi NCR · V5
+# Christ Connect · Delhi NCR Deluxe V2
 
-A Delhi NCR-specific Christ Connect student platform that keeps the original feature universe while adding a cinematic landing experience, persistent Supabase Auth sessions, student-owned profile data, subject-wise attendance intelligence, Lost & Found workflows, and outlet-specific canteen preorder.
+A full static frontend + Supabase-backed private student portal based on the original Christ Connect build.
 
-## What changed
-- Original Christ Connect editorial palette: cream / dark teal / coral / green / yellow.
-- Scrollytelling landing page with sticky story panels, parallax reveals, cursor-follow visual and a pure-CSS 3D campus scene.
-- Active imagery is limited to CHRIST Delhi NCR campus/gallery images referenced from the university's public gallery.
-- Delhi NCR-only academic directory and student bodies / centres.
-- Official 2026–27 Academic Calendar is linked directly to the university publication.
-- Persistent Supabase Auth session (`persistSession` + auto refresh + dedicated storage key).
-- Student profile is database-backed and scoped to the authenticated registration-number account.
-- Attendance intelligence calculates current %, future attended %, future missed %, safe misses at target, and recovery classes.
-- Canteen preorder across the ten named food outlets/counters published on the official Delhi NCR Dining Facilities page; each outlet has a distinct prototype menu.
-- Preorders are prepaid in the application model, produce an on-site receipt code, save to the student's order history, and can only be cancelled through the server RPC during the first two minutes.
-- Lost & Found lets authenticated students report lost/found items and submit claims. Item owners can review claims through their own authenticated view; new claims create notifications.
-- Original Christ Connect feature pages are retained: events, today/week/upcoming, workshops, hackathons, competitions, guest lectures, cultural fests, sports, department events, club events, registration, countdown, calendar, skill exchange, marketplace, lost & found, community, campus guide, rewards, notifications, admin, saved events, wishlist, listings, orders, skills, interests, details, department and year.
-- `server.js` is preserved exactly from the original project and is not used by the Supabase client workflow.
+## What's included
 
-## Supabase setup
-1. Keep the existing `config.js` project URL + publishable key. Never put a service-role/secret key in browser code.
-2. If this is an existing Christ Connect Supabase project, run `supabase/v5_migration.sql` once in Supabase SQL Editor.
-3. Keep the already-deployed `login-with-registration` and `provision-student` Edge Functions. No redeploy is needed just for the V5 frontend/migration.
-4. The current application assumes the existing working registration-number login function returns a Supabase session.
-5. Run locally: `python -m http.server 5500`
-6. Open: `http://127.0.0.1:5500/`
+- Restored original Christ Connect feature pages: events, workshops, hackathons, competitions, guest lectures, cultural fests, sports, department events, club events, calendar, countdown, skill exchange, marketplace, lost & found, community, campus guide, rewards, notifications, admin dashboard, profile/account surfaces, and all the original supporting pages.
+- Redesigned public landing page with the original cream / dark-teal / coral / green / yellow palette, scroll storytelling, parallax, glassmorphism, neumorphism, responsive layouts, local SVG visuals, and an optional Three.js interactive campus scene.
+- Supabase-backed registration-number login using Supabase Auth.
+- Private student dashboard and profile that read authenticated data from Postgres using RLS.
+- Subject-wise attendance dashboard and what-if calculator:
+  - current percentage
+  - percentage after attending N future classes
+  - percentage after missing N future classes
+  - percentage-point gain/loss
+  - number of classes that can be missed while staying at target
+  - number of classes needed to reach target
+- Profile skills, interests and notification preferences stored in Postgres.
 
-### Demo login
-Registration: `DEMO2026BCA001`
-Password: `DemoPass!2026`
+## Current Supabase setup
 
-These are demo credentials, not official university credentials.
+The existing login/provisioning functions from the working project are preserved under `supabase/functions/`.
 
-## Canteen payment note
-The database/API has a prepaid order contract and stores a payment reference, but this package uses a **demo payment provider/reference**. That is intentionally not real-money processing. For production, replace the demo payment step with a real Razorpay/Stripe-style server-verified payment flow; never mark an order paid from browser-only input.
+For a project that already has the base schema, run `supabase/upgrade_v2.sql` once. It adds the attendance/profile enhancements and demo data for `DEMO2026BCA001` only.
 
-The public dining page names the campus food outlets but does not expose complete vendor price sheets; therefore the per-outlet prices in `v5_migration.sql` are explicitly prototype/demo values and should be replaced with approved vendor menus before real deployment.
+For a new project, run `supabase/schema.sql`, then `supabase/upgrade_v2.sql`.
 
-## Data provenance
-See `SOURCES_DELHI_NCR.md` for the current official pages used for campus, academics, dining, calendar, student bodies, activity names, social hub and gallery imagery.
+Do not put a service-role or secret key in `config.js`.
+
+## Local testing
+
+Open the folder in VS Code and run:
+
+```powershell
+python -m http.server 5500
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5500/
+```
+
+Use a provisioned student account. The demo account created by the included admin workflow is:
+
+```text
+Registration: DEMO2026BCA001
+Password: DemoPass!2026
+```
+
+These values are demo credentials, not official university credentials.
+
+## Supabase functions
+
+Deploy from the project root:
+
+```powershell
+supabase functions deploy login-with-registration
+supabase functions deploy provision-student --no-verify-jwt
+```
+
+The provisioning function expects the `CHRIST_CONNECT_ADMIN_SECRET` secret. Supabase-provided `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` values are consumed server-side by the Edge Function and must not be copied into browser code.
+
+## Note on official data
+
+The project contains demo events, clubs and attendance values only. Replace them with legitimate university-provided data before treating any result as official.
+
+
+## V3 additions
+- Persistent Supabase Auth session across tabs/browser revisits.
+- Delhi NCR dining pre-order flow: `canteen.html`.
+- Run `supabase/upgrade_v3.sql` after the existing schema/upgrade.
+- Delhi NCR-only organization/school directory data.
+- Generic photography providers were removed from the active landing/login UI; active photography points to Delhi NCR campus gallery images.
+- Existing Edge Functions are intentionally unchanged.
+
+## V5 additions
+- Run `supabase/upgrade_v4.sql` after v3. Adds prepaid wallet + ledger, server-enforced 2-minute cancel window with refund, registration-number-stamped e-receipts (`get_order_receipt`), admin-only top-up (`admin_topup_wallet`).
+- `canteen.js`: wallet balance, live cancel countdown, on-site e-receipt.
+- `app.js`: landing 3D campus now tracks the cursor (beacon, spotlight, leaning tower, custom cursor).
+- `academic-calendar.html`: embeds the official 2026-27 calendar page.
+
+
+---
+
+## V6 database integration
+The UI is connected to the Supabase/PostgreSQL data layer for private student data, attendance, events, clubs, notifications, dining orders, e-receipts and Lost & Found. See `SETUP_V6.md`.
