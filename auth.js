@@ -1,10 +1,13 @@
+
 (() => {
   const cfg = window.CHRIST_CONNECT_CONFIG;
   const PRIVATE = document.body?.dataset.private === 'true';
+
   const READY = (async () => {
     if (!cfg?.SUPABASE_URL || !cfg?.SUPABASE_ANON_KEY || cfg.SUPABASE_URL.includes('YOUR_PROJECT')) {
       throw new Error('Supabase configuration missing.');
     }
+
     if (!window.supabase) {
       await new Promise((resolve, reject) => {
         const s = document.createElement('script');
@@ -14,6 +17,7 @@
         document.head.appendChild(s);
       });
     }
+
     const client = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
       auth: {
         persistSession: true,
@@ -24,30 +28,41 @@
       }
     });
 
-    // One-time migration from the first Christ Connect prototype.
-    const legacy = localStorage.getItem('cc_session');
-    if (legacy) {
+    let { data: { session } } = await client.auth.getSession();
+
+    window.CC_AUTH = { client, session, student: null };
+    document.documentElement.dataset.auth = session ? 'signed-in' : 'signed-out';
+
+    if (session) {
       try {
-        const session = JSON.parse(legacy);
-        if (session?.access_token && session?.refresh_token) {
-          await client.auth.setSession({
-            access_token: session.access_token,
-            refresh_token: session.refresh_token
-          });
+        const res = await fetch(
+          `${cfg.SUPABASE_URL}/rest/v1/student_profiles?select=*&limit=1`,
+          { headers: { apikey: cfg.SUPABASE_ANON_KEY, Authorization: `Bearer ${session.access_token}` } }
+        );
+        if (res.ok) {
+          const rows = await res.json();
+          window.CC_AUTH.student = rows?.[0] || null;
+          if (window.CC_AUTH.student) {
+            localStorage.setItem('cc_student_snapshot', JSON.stringify({
+              id: window.CC_AUTH.student.id,
+              registration_number: window.CC_AUTH.student.registration_number,
+              full_name: window.CC_AUTH.student.full_name
+            }));
+          }
         }
       } catch (_) {}
-      localStorage.removeItem('cc_session'); localStorage.setItem('cc_last_auth_restore', new Date().toISOString());
     }
-
-    let { data: { session } } = await client.auth.getSession();
-    window.CC_AUTH = { client, session };
-    document.documentElement.dataset.auth = session ? 'signed-in' : 'signed-out';
 
     client.auth.onAuthStateChange((event, nextSession) => {
       window.CC_AUTH.session = nextSession;
       document.documentElement.dataset.auth = nextSession ? 'signed-in' : 'signed-out';
-      if (!nextSession && PRIVATE && !location.pathname.endsWith('/portal.html')) {
-        location.href = 'portal.html';
+      if (!nextSession) {
+        window.CC_AUTH.student = null;
+        localStorage.removeItem('cc_student_snapshot');
+        if (PRIVATE && !location.pathname.endsWith('/portal.html')) {
+          location.href = 'portal.html';
+          return;
+        }
       }
       window.dispatchEvent(new CustomEvent('cc-auth-change', { detail: { event, session: nextSession } }));
     });
@@ -56,6 +71,7 @@
       location.href = 'portal.html';
       return { client, session: null };
     }
+
     return { client, session };
   })();
 
