@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Explore the Campus · Christ Connect</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#182b38;--navy:#1b303d;--coral:#e96447;--paper:#f8f7f2;--line:#e5e7e1}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:18px;align-items:center;padding:14px 24px;background:#f8f7f2ee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line);font-weight:700;font-size:14px}
+nav a{color:var(--ink);text-decoration:none}nav a:first-child{margin-right:auto;font:600 20px 'Playfair Display',serif}
+section{min-height:90vh;padding:90px 24px;max-width:1100px;margin:0 auto}
+.eyebrow{letter-spacing:1.6px;font-size:11px;font-weight:700;color:#7d8a83}
+h1,h2{font:600 clamp(40px,7vw,80px)/1 'Playfair Display',serif;margin:8px 0 18px}h2{font-size:clamp(32px,5vw,56px)}em{color:var(--coral)}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}.rv.on{opacity:1;transform:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px}.card h3{margin:0 0 8px;font:600 22px 'Playfair Display',serif}
+.tag{display:inline-block;background:#eef2ee;border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700;margin:3px 3px 0 0}.tag.s{background:#fbe3dc;color:#a8432b}
+.photos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}.photos img{width:100%;height:260px;object-fit:cover;border-radius:20px}
+iframe.map{width:100%;height:60vh;border:0;border-radius:22px}
+.blocks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}.blocks div{background:var(--navy);color:#fff;border-radius:18px;padding:18px}.blocks b{color:#f6b8a8}
+.note{font-size:12px;color:#718087;margin-top:14px}
+</style></head><body>
+<nav><a href="index.html">Christ Connect</a><a href="#depts">Departments</a><a href="#clubs">Clubs</a><a href="#map">Map</a><a href="#photos">Photos</a><a href="academic-calendar.html">Calendar</a><a href="canteen.html">Pre-order</a></nav>
+
+<section style="display:grid;align-content:center"><p class="eyebrow rv">CHRIST (DEEMED TO BE UNIVERSITY) · DELHI NCR · MARIAM NAGAR, MEERUT ROAD, GHAZIABAD</p><h1 class="rv">Know your <em>campus</em> before you arrive.</h1><p class="rv" style="max-width:560px;font-size:18px">Departments, clubs, the map, real campus photos, and where to eat. Scroll.</p></section>
+
+<section id="depts"><p class="eyebrow rv">SCHOOLS &amp; DEPARTMENTS</p><h2 class="rv">Where you'll <em>study</em></h2><div class="grid" id="deptGrid"></div>
+<p class="note">Source: ncr.christuniversity.in school and department pages. Only programmes published for the Delhi NCR campus are listed.</p></section>
+
+<section id="clubs"><p class="eyebrow rv">CLUBS &amp; ASSOCIATIONS</p><h2 class="rv">Where you'll <em>belong</em></h2><div class="grid" id="clubGrid"></div>
+<p class="note">Official handles: <a href="https://www.instagram.com/christ_university_ncr/" target="_blank" rel="noopener">@christ_university_ncr</a> · <a href="https://www.instagram.com/studentcouncil_ncr/" target="_blank" rel="noopener">@studentcouncil_ncr</a>. Club lists grow as the university publishes them.</p></section>
+
+<section id="map"><p class="eyebrow rv">NAVIGATE</p><h2 class="rv">Find your <em>way</em></h2>
+<iframe class="map rv" loading="lazy" title="CHRIST Delhi NCR on map" src="https://www.google.com/maps?q=CHRIST+(Deemed+to+be+University)+Delhi+NCR+Campus+Mariam+Nagar+Ghaziabad&output=embed"></iframe>
+<div class="blocks rv"><div><b>Block A</b><br>Gourmet Hall (level −1): 5 food vendors</div><div><b>Block B</b><br>Cafe Coffee Day (level −1) · Rooftop Cafe &amp; Giani's (terrace)</div><div><b>Block C</b><br>Fresheteria</div></div>
+<p class="note">Live map above. The block list is from the official dining page; an indoor floor-by-floor map needs the campus plan, which the university has not published.</p></section>
+
+<section id="photos"><p class="eyebrow rv">THE CAMPUS</p><h2 class="rv">Real <em>photos</em></h2><div class="photos" id="ph"></div>
+<p class="note">Photos from CHRIST University's official gallery.</p></section>
+
+<script src="campus-data.js"></script>
+<script>
+const D=[
+ {n:'Computational Sciences',s:'School of Sciences · Computer Science, Mathematics & Statistics',h:'HOD: Dr. Bosco Paul Alapatt',t:['BCA (Hons / Hons with Research)','BSc Data Science & AI (Hons)','BSc Computer Science, Mathematics, Statistics','BSc Economics, Mathematics, Statistics','BSc Economics, Data Analytics (Hons)','PhD Computer Science','PhD Mathematics'],sci:1,c:['EULIM Science Club','Technical Club of Sciences (TCS, est. 2023)','Department Sports Club (est. 2021)']},
+ {n:'Arts, Humanities & Social Sciences',s:'School of Arts, Humanities and Social Sciences',h:'',t:['BA Economics, Political Science, Sociology','BA Psychology, Sociology, English','BA Media & Public Affairs (Hons)','BSc Psychology (Hons)','BSc Economics (Hons)'],c:[]}];
+const E=(a,b)=>document.getElementById(a).innerHTML=b;
+E('deptGrid',D.map(d=>`<article class="card rv"><h3>${d.n}</h3><p style="margin:0 0 10px;color:#5f6d73">${d.s}</p>${d.h?`<p><b>${d.h}</b></p>`:''}${d.t.map(x=>`<span class="tag ${d.sci?'s':''}">${x}</span>`).join('')}${d.c.length?`<p style="margin:14px 0 4px;font-size:12px;font-weight:700;color:#7d8a83">DEPARTMENT CLUBS</p>${d.c.map(x=>`<span class="tag">${x}</span>`).join('')}`:''}</article>`).join(''));
+const C=[['Student Council NCR','University level','Official student council of the campus. Instagram: @studentcouncil_ncr'],['EULIM Science Club','School of Sciences','Technical and co-curricular activity, independent research and self-expression.'],['Technical Club of Sciences (TCS)','School of Sciences','Technical skills, placement preparation and competitions since 2023.'],['Department Sports Club','School of Sciences','Intra-departmental sports cell, running since 2021.']];
+E('clubGrid',C.map(c=>`<article class="card rv"><p class="eyebrow" style="margin:0">${c[1].toUpperCase()}</p><h3>${c[0]}</h3><p style="margin:0">${c[2]}</p></article>`).join(''));
+E('ph',((window.CHRIST_NCR_DATA?.campus?.photos)||[]).map(u=>`<img class="rv" loading="lazy" alt="CHRIST Delhi NCR campus" src="${u}">`).join('')||'<p>Photos unavailable.</p>');
+const io=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&x.target.classList.add('on')),{threshold:.15});
+setTimeout(()=>document.querySelectorAll('.rv').forEach(el=>io.observe(el)),0);
+</script></body></html>
