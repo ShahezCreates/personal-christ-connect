@@ -1,179 +1,23 @@
-(() => {
-  const cfg = window.CHRIST_CONNECT_CONFIG;
-  const stored = JSON.parse(localStorage.getItem('cc_session') || 'null');
-  const token = stored?.access_token || stored?.session?.access_token;
-  if (!token || !cfg || !cfg.SUPABASE_URL || cfg.SUPABASE_URL.includes('YOUR_PROJECT')) {
-    location.href = 'portal.html';
-    return;
-  }
-
-  const tabs = [...document.querySelectorAll('[data-tab]')];
-  const panels = [...document.querySelectorAll('.panel')];
-  const validSections = panels.map(p => p.id);
-  const toast = document.querySelector('#toast');
-  let timer;
-  const state = { profile:null, clubs:[], events:[], notifications:[] };
-
-  function note(text) {
-    toast.textContent = text;
-    toast.classList.add('show');
-    clearTimeout(timer);
-    timer = setTimeout(() => toast.classList.remove('show'), 2300);
-  }
-  function initials(name='Student') { return name.split(/\s+/).filter(Boolean).map(x => x[0]).join('').slice(0,2).toUpperCase(); }
-  function esc(text='') { const d=document.createElement('div'); d.textContent=String(text); return d.innerHTML; }
-  function fmtDate(value) { if (!value) return ''; return new Date(value).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'numeric',minute:'2-digit'}); }
-
-  async function api(path, opts={}) {
-    const r = await fetch(`${cfg.SUPABASE_URL}/rest/v1/${path}`, {
-      ...opts,
-      headers: {
-        apikey: cfg.SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${token}`,
-        ...(opts.headers || {})
-      }
-    });
-    if (r.status === 401) { localStorage.removeItem('cc_session'); location.href='portal.html'; throw new Error('Session expired'); }
-    if (!r.ok) throw new Error(await r.text());
-    return r.status === 204 ? null : r.json();
-  }
-
-  function show(id) {
-    const section = validSections.includes(id) ? id : 'overview';
-    tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === section));
-    panels.forEach(panel => panel.classList.toggle('active', panel.id === section));
-    history.replaceState(null,'',`profile.html?section=${encodeURIComponent(section)}`);
-    window.scrollTo({top:0,behavior:'smooth'});
-    if (section === 'notifications') markNotificationsRendered();
-  }
-  tabs.forEach(tab => tab.addEventListener('click', () => show(tab.dataset.tab)));
-  document.querySelectorAll('[data-go]').forEach(btn => btn.addEventListener('click', () => show(btn.dataset.go)));
-  show(new URLSearchParams(location.search).get('section') || 'overview');
-
-  async function load() {
-    try {
-      const p = (await api('student_profiles?select=*&limit=1'))[0];
-      if (!p) throw new Error('Student profile not found');
-      state.profile = p;
-      const [clubs, events, notifications] = await Promise.all([
-        api('club_memberships?select=joined_at,club_id,clubs(name,level,description)&order=joined_at.desc'),
-        api('event_registrations?select=registered_at,event_id,events(title,starts_at,location)&order=registered_at.desc&limit=20'),
-        api('notifications?select=id,title,body,is_read,created_at&order=created_at.desc&limit=20')
-      ]);
-      state.clubs = clubs || [];
-      state.events = events || [];
-      state.notifications = notifications || [];
-      render();
-    } catch (e) {
-      console.error(e);
-      note('Could not load all profile data.');
-    }
-  }
-
-  function render() {
-    const p=state.profile;
-    document.querySelector('#name').textContent=p.full_name || 'Student';
-    document.querySelector('#meta').textContent=[p.programme,p.department,p.batch_year && `Batch ${p.batch_year}`].filter(Boolean).join(' · ') || 'Christ Connect student';
-    document.querySelector('#avatar').firstChild.textContent=initials(p.full_name);
-    document.querySelector('#heroStatus').textContent=(p.status || 'ACTIVE').toUpperCase();
-    document.querySelector('#heroCampus').textContent='Delhi NCR';
-    document.querySelector('#fullNameInput').value=p.full_name || '';
-    document.querySelector('#emailInput').value=p.university_email || '';
-    document.querySelector('#regInput').value=p.registration_number || '';
-    document.querySelector('#bioInput').value=p.bio || '';
-    document.querySelector('#school').textContent=p.school || '—';
-    document.querySelector('#department').textContent=p.department || '—';
-    document.querySelector('#programme').textContent=p.programme || '—';
-    document.querySelector('#batch').textContent=p.batch_year || '—';
-
-    const prefs = JSON.parse(localStorage.getItem('cc_profile_preferences') || '{}');
-    const skills = prefs.skills || ['Figma','JavaScript','Photography','Public speaking'];
-    const interests = prefs.interests || ['Design','Music','Startups','Football','Film'];
-    renderTags('#skillTags',skills,true);
-    renderTags('#interestTags',interests,false);
-
-    document.querySelector('#clubsSummary').textContent=`${state.clubs.length} clubs joined`;
-    document.querySelector('#clubsSummaryText').textContent=state.clubs.length ? state.clubs.slice(0,3).map(x=>x.clubs?.name).filter(Boolean).join(' · ') : 'Explore campus communities.';
-    document.querySelector('#eventsSummary').textContent=`${state.events.length} events saved`;
-    document.querySelector('#eventsSummaryText').textContent=state.events.length ? 'Your registered events are here.' : 'No registered events yet.';
-
-    const complete=[p.full_name,p.university_email,p.registration_number,p.school,p.department,p.programme,p.batch_year,p.bio].filter(Boolean).length;
-    const pct=Math.round(complete/8*100);
-    document.querySelector('#profileComplete').textContent=`${pct}%`;
-    document.querySelector('#profileCompleteText').textContent=pct>=88?'Profile looks complete.':`Add a bio and missing academic details to reach ${Math.min(100,pct+12)}%.`;
-    const unread=state.notifications.filter(n=>!n.is_read).length;
-    document.querySelector('#notificationBadge').textContent=unread;
-
-    document.querySelector('#clubItems').innerHTML = state.clubs.length ? state.clubs.map((m,i)=>`<div><span class="orb ${['red','yellow','blue'][i%3]}">${i===0?'⌘':i===1?'◒':'◈'}</span><p><b>${esc(m.clubs?.name || 'Club')}</b><small>${esc(m.clubs?.description || m.clubs?.level || 'Campus community')}</small></p></div>`).join('') : '<div><span class="orb">◌</span><p><b>No clubs joined yet.</b><small>Explore the clubs directory from Home.</small></p></div>';
-    document.querySelector('#eventItems').innerHTML = state.events.length ? state.events.map((r,i)=>`<div><span class="orb yellow">${r.events?.starts_at ? new Date(r.events.starts_at).getDate() : '◫'}</span><p><b>${esc(r.events?.title || 'Campus event')}</b><small>${esc(r.events?.location || 'Campus')} · ${esc(fmtDate(r.events?.starts_at))}</small></p></div>`).join('') : '<div><span class="orb yellow">◫</span><p><b>No registered events yet.</b><small>Explore events to start building your calendar.</small></p></div>';
-    document.querySelector('#ordersText').textContent='Canteen order history is ready for the connected backend; no student orders are currently recorded.';
-    document.querySelector('#notificationsList').innerHTML = state.notifications.length ? state.notifications.map(n=>`<li>${n.is_read?'◌':'✦'} <span><b>${esc(n.title)}</b><small>${esc(n.body || '')} · ${esc(fmtDate(n.created_at))}</small></span></li>`).join('') : '<li>◌ <span><b>You are all caught up.</b><small>No notifications yet.</small></span></li>';
-    const recent=[];
-    state.events.slice(0,3).forEach(r=>recent.push(`◫|${r.events?.title || 'Campus event'}|${fmtDate(r.registered_at || r.events?.starts_at)}`));
-    state.clubs.slice(0,2).forEach(r=>recent.push(`◌|Joined ${r.clubs?.name || 'a club'}|${fmtDate(r.joined_at)}`));
-    state.notifications.filter(n=>!n.is_read).slice(0,2).forEach(n=>recent.push(`✦|${n.title}|${fmtDate(n.created_at)}`));
-    document.querySelector('#recentActivity').innerHTML=recent.length?recent.slice(0,6).map(x=>{const [icon,title,when]=x.split('|');return `<li>${icon} <span><b>${esc(title)}</b><small>${esc(when)}</small></span></li>`}).join(''):'<li>◌ <span><b>Nothing new yet.</b><small>Your account activity will appear here.</small></span></li>';
-
-    const pref=JSON.parse(localStorage.getItem('cc_settings')||'{}');
-    document.querySelector('#prefEmail').checked=pref.email!==false;
-    document.querySelector('#prefMarket').checked=pref.market!==false;
-    document.querySelector('#prefSkills').checked=pref.skills===true;
-  }
-
-  function renderTags(selector, values, removable) {
-    const container=document.querySelector(selector);
-    container.innerHTML=values.map((value,i)=>`<span>${esc(value)}${removable?` <button type="button" data-skill-index="${i}">×</button>`:''}</span>`).join('');
-    if (removable) container.onclick=e=>{const btn=e.target.closest('[data-skill-index]');if(!btn)return;const prefs=JSON.parse(localStorage.getItem('cc_profile_preferences')||'{}');const skills=prefs.skills||['Figma','JavaScript','Photography','Public speaking'];skills.splice(Number(btn.dataset.skillIndex),1);prefs.skills=skills;localStorage.setItem('cc_profile_preferences',JSON.stringify(prefs));renderTags(selector,skills,true);note('Skill removed.');};
-  }
-
-  document.querySelector('#addSkill').addEventListener('click',()=>{const value=prompt('Add a skill you can share:');if(!value?.trim())return;const prefs=JSON.parse(localStorage.getItem('cc_profile_preferences')||'{}');const skills=prefs.skills||['Figma','JavaScript','Photography','Public speaking'];skills.push(value.trim());prefs.skills=skills;localStorage.setItem('cc_profile_preferences',JSON.stringify(prefs));renderTags('#skillTags',skills,true);note('Skill added.');});
-
-  function startEdit() {
-    const form=document.querySelector('#profileForm');
-    form.classList.add('editing');
-    form.querySelectorAll('input,textarea').forEach(el=>{ if(!['emailInput','regInput'].includes(el.id)) el.disabled=false; });
-    note('You can now update your details.');
-  }
-  document.querySelector('#edit').addEventListener('click',startEdit);
-  document.querySelector('#save').addEventListener('click',async()=>{
-    const payload={full_name:document.querySelector('#fullNameInput').value.trim(),bio:document.querySelector('#bioInput').value.trim()||null};
-    if(!payload.full_name){note('Name cannot be empty.');return;}
-    try{
-      const p=state.profile;
-      const r=await api(`student_profiles?id=eq.${encodeURIComponent(p.id)}`,{method:'PATCH',headers:{'Content-Type':'application/json',Prefer:'return=representation'},body:JSON.stringify(payload)});
-      state.profile=r[0]||{...p,...payload};
-      document.querySelector('#profileForm').classList.remove('editing');
-      document.querySelector('#fullNameInput').disabled=true;document.querySelector('#bioInput').disabled=true;
-      render();note('Profile details saved.');
-    }catch(e){console.error(e);note('Could not save profile details.');}
-  });
-
-  async function markNotificationsRendered(){
-    if(!state.notifications.some(n=>!n.is_read))return;
-    // Do not auto-mark on navigation; user controls it.
-  }
-  document.querySelector('#read').addEventListener('click',async()=>{
-    try{
-      await api('notifications?student_id=eq.me&is_read=eq.false',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_read:true})});
-    }catch(e){
-      // RLS does not expose student_id="me" syntax, so update each allowed notification directly.
-      await Promise.all(state.notifications.filter(n=>!n.is_read).map(n=>api(`notifications?id=eq.${n.id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_read:true})})));
-    }
-    state.notifications=state.notifications.map(n=>({...n,is_read:true}));render();note('Notifications marked as read.');
-  });
-
-  function signOut(){localStorage.removeItem('cc_session');location.href='portal.html';}
-  document.querySelector('#logout').addEventListener('click',signOut);
-  document.querySelector('#logoutTop').addEventListener('click',signOut);
-  document.querySelectorAll('[data-local-remove]').forEach(btn=>btn.addEventListener('click',()=>{btn.closest('.items>div')?.remove();note('Removed from wishlist.');}));
-
-  // local settings
-  ['prefEmail','prefMarket','prefSkills'].forEach(id=>document.querySelector('#'+id).addEventListener('change',()=>{
-    localStorage.setItem('cc_settings',JSON.stringify({email:document.querySelector('#prefEmail').checked,market:document.querySelector('#prefMarket').checked,skills:document.querySelector('#prefSkills').checked}));
-    note('Preference saved.');
-  }));
-
-  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-  load();
-})();
+const cfg=window.CHRIST_CONNECT_CONFIG;const stored=JSON.parse(localStorage.getItem('cc_session')||'null');const token=stored?.access_token||stored?.session?.access_token;if(!token){location.href='portal.html';throw new Error('No session');}
+const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+async function api(path,opts={}){const r=await fetch(`${cfg.SUPABASE_URL}/rest/v1/${path}`,{...opts,headers:{apikey:cfg.SUPABASE_ANON_KEY,Authorization:`Bearer ${token}`,...(opts.headers||{})}});if(!r.ok)throw new Error(await r.text());return r.status===204?null:r.json()}
+const tabs=[...document.querySelectorAll('[data-tab]')];const panels=[...document.querySelectorAll('.panel')];const valid=panels.map(p=>p.id);function show(id){const section=valid.includes(id)?id:'overview';tabs.forEach(t=>t.classList.toggle('active',t.dataset.tab===section));panels.forEach(p=>p.classList.toggle('active',p.id===section));history.replaceState({},'',`profile.html?section=${section}`);scrollTo({top:0,behavior:'smooth'})}const requested=new URLSearchParams(location.search).get('section');tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.tab)));document.querySelectorAll('[data-go]').forEach(x=>x.addEventListener('click',()=>show(x.dataset.go)));
+let student=null,rows=[],selected=-1;const toast=document.querySelector('#toast');let timer;function note(t){toast.textContent=t;toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),2200)}
+const calcStats=(a,h)=>h?Math.round(a/h*1000)/10:null;
+function compute(row){const target=Number(document.querySelector('#profileTarget').value)||75;const an=Math.max(0,Number(document.querySelector('#pAttend').value)||0);const mn=Math.max(0,Number(document.querySelector('#pMiss').value)||0);const h=Number(row.sessions_held),a=Number(row.sessions_attended);const current=calcStats(a,h);const afterA=calcStats(a+an,h+an),afterM=calcStats(a,h+mn);const can=Math.max(0,Math.floor((a*100/target-h)+1e-9));const need=target<100&&a/h*100<target?Math.max(0,Math.ceil((target*h-100*a)/(100-target)-1e-9)):0;document.querySelector('#pAfterAttend').textContent=`${afterA.toFixed(1)}%`;document.querySelector('#pAfterMiss').textContent=`${afterM.toFixed(1)}%`;document.querySelector('#pAttendDelta').textContent=`${afterA-current>=0?'+':''}${(afterA-current).toFixed(1)} pts`;document.querySelector('#pMissDelta').textContent=`${afterM-current>=0?'+':''}${(afterM-current).toFixed(1)} pts`;document.querySelector('#pCanMiss').textContent=can;document.querySelector('#pNeed').textContent=need;document.querySelector('#profileCalcTitle').textContent=row.course_name;document.querySelector('#profileCalcSummary').textContent=`${row.sessions_attended}/${row.sessions_held} classes attended.`}
+function renderAttendance(){const target=Number(document.querySelector('#profileTarget').value)||75;const grid=document.querySelector('#profileAttendanceGrid');if(!rows.length){grid.innerHTML='<div class="empty-state">No attendance records have been provisioned for this student yet.</div>';return}grid.innerHTML=rows.map((r,i)=>{const p=calcStats(r.sessions_attended,r.sessions_held)||0;const ok=p>=target;return `<article class="attendance-card ${i===selected?'active':''}" data-i="${i}"><span class="code">${esc(r.course_code)}</span><h3>${esc(r.course_name)}</h3><div class="row"><strong>${p.toFixed(1)}%</strong><small>${r.sessions_attended}/${r.sessions_held} attended</small></div><div class="bar"><i style="width:${Math.min(100,p)}%;display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--coral),#98b57e)"></i></div><span class="badge ${ok?'':'warn'}">${ok?'ABOVE TARGET':'BELOW TARGET'}</span></article>`}).join('');grid.querySelectorAll('[data-i]').forEach(el=>el.addEventListener('click',()=>{selected=Number(el.dataset.i);renderAttendance();document.querySelector('#profileCalc').hidden=false;compute(rows[selected]);}));if(selected<0)selected=0;document.querySelector('#profileCalc').hidden=false;compute(rows[selected]);}
+async function load(){try{student=(await api('student_profiles?select=*&limit=1'))[0];if(!student)throw new Error('Student profile not found');document.querySelector('#name').textContent=student.full_name;document.querySelector('#meta').textContent=[student.programme,student.department,student.batch_year&&`Batch ${student.batch_year}`].filter(Boolean).join(' · ')||'Student';document.querySelector('#heroStatus').textContent=(student.status||'active').toUpperCase();document.querySelector('#avatar').textContent=student.full_name.split(/\s+/).filter(Boolean).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+document.querySelector('#fullNameInput').value=student.full_name||'';document.querySelector('#emailInput').value=student.university_email||'';document.querySelector('#regInput').value=student.registration_number||'';document.querySelector('#statusInput').value=student.status||'';document.querySelector('#campusInput').value=student.campus||'Delhi NCR · Mariam Nagar';document.querySelector('#phoneInput').value=student.phone||'';document.querySelector('#bioInput').value=student.bio||'';document.querySelector('#school').textContent=student.school||'—';document.querySelector('#department').textContent=student.department||'—';document.querySelector('#programme').textContent=student.programme||'—';document.querySelector('#batch').textContent=student.batch_year||'—';document.querySelector('#semester').textContent=student.semester||'—';document.querySelector('#section').textContent=student.section||'—';
+rows=await api('attendance_records?select=course_code,course_name,sessions_held,sessions_attended&order=course_name');const totalH=rows.reduce((n,r)=>n+Number(r.sessions_held),0),totalA=rows.reduce((n,r)=>n+Number(r.sessions_attended),0),op=calcStats(totalA,totalH);document.querySelector('#overallAttendance').textContent=op==null?'—':`${op.toFixed(1)}%`;document.querySelector('#overallBar').style.width=`${Math.min(100,op||0)}%`;document.querySelector('#overallAttendanceText').textContent=totalH?`${totalA}/${totalH} classes attended`:'No attendance data';renderAttendance();
+const skills=await api('student_skills?select=skill&order=created_at');document.querySelector('#skillTags').innerHTML=skills.length?skills.map(s=>`<span>${esc(s.skill)} <button data-del-skill="${esc(s.skill)}">×</button></span>`).join(''):'<small class="micro-note">No skills added yet.</small>';document.querySelectorAll('[data-del-skill]').forEach(b=>b.addEventListener('click',async()=>{await api(`student_skills?student_id=eq.${encodeURIComponent(student.id)}&skill=eq.${encodeURIComponent(b.dataset.delSkill)}`,{method:'DELETE'});note('Skill removed.');load()}));
+const interests=await api('student_interests?select=interest&order=created_at');document.querySelector('#interestTags').innerHTML=interests.length?interests.map(s=>`<span>${esc(s.interest)}</span>`).join(''):'<small class="micro-note">No interests added yet.</small>';
+const clubs=await api('club_memberships?select=joined_at,clubs(name,description)&order=joined_at.desc');document.querySelector('#clubsSummary').textContent=`${clubs.length} clubs joined`;document.querySelector('#clubsSummaryText').textContent=clubs.length?clubs.slice(0,2).map(x=>x.clubs?.name).filter(Boolean).join(' · '):'No communities yet';document.querySelector('#clubItems').innerHTML=clubs.length?clubs.map(x=>`<div><span class="orb">◌</span><p><b>${esc(x.clubs?.name||'Club')}</b><small>${esc(x.clubs?.description||'Student community')} · Joined ${new Date(x.joined_at).toLocaleDateString()}</small></p></div>`).join(''):'<div><p><b>No joined clubs yet.</b><small>Explore the Clubs section to discover communities.</small></p></div>';
+const ev=await api('event_registrations?select=registered_at,events(title,starts_at,location)&order=registered_at.desc');document.querySelector('#eventsSummary').textContent=`${ev.length} events saved`;document.querySelector('#eventsSummaryText').textContent=ev.length?ev.slice(0,2).map(x=>x.events?.title).filter(Boolean).join(' · '):'No saved events yet';document.querySelector('#eventItems').innerHTML=ev.length?ev.map(x=>`<div><span class="orb yellow">◫</span><p><b>${esc(x.events?.title||'Event')}</b><small>${esc(x.events?.location||'Campus')} · ${x.events?.starts_at?new Date(x.events.starts_at).toLocaleString():''}</small></p></div>`).join(''):'<div><p><b>No saved events yet.</b><small>Explore events to build your plans.</small></p></div>';
+const ns=await api('notifications?select=id,title,body,is_read,created_at&order=created_at.desc&limit=20');const unread=ns.filter(n=>!n.is_read).length;document.querySelector('#notificationBadge').textContent=unread;document.querySelector('#notificationsList').innerHTML=ns.length?ns.map(n=>`<li>${n.is_read?'◌':'✦'} <span><b>${esc(n.title)}</b><small>${esc(n.body||'')} · ${new Date(n.created_at).toLocaleString()}</small></span></li>`).join(''):'<li>◌ <span><b>No notifications.</b><small>You’re all caught up.</small></span></li>';
+const pref=(await api('student_preferences?select=*&limit=1'))[0];if(pref){document.querySelector('#prefEmail').checked=pref.email_notifications;document.querySelector('#prefMarket').checked=pref.marketplace_alerts;document.querySelector('#prefSkills').checked=pref.skill_suggestions}
+}catch(e){console.error(e);note('Unable to load your private profile data.')}}
+function editMode(){const form=document.querySelector('#profileForm');form.classList.add('editing');document.querySelectorAll('#profileForm input,#profileForm textarea').forEach(x=>{if(!['fullNameInput','emailInput','regInput','statusInput','campusInput'].includes(x.id))x.disabled=false});show('details');note('Bio and phone are now editable.')}document.querySelector('#edit').addEventListener('click',editMode);document.querySelector('#editDetails').addEventListener('click',editMode);document.querySelector('#save').addEventListener('click',async()=>{try{await api(`student_profiles?id=eq.${encodeURIComponent(student.id)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({bio:document.querySelector('#bioInput').value.trim()||null,phone:document.querySelector('#phoneInput').value.trim()||null})});document.querySelector('#profileForm').classList.remove('editing');document.querySelector('#bioInput').disabled=true;document.querySelector('#phoneInput').disabled=true;note('Profile updated.');await load()}catch(e){note('Could not save profile.')}});
+document.querySelector('#addSkill').addEventListener('click',async()=>{const v=prompt('Add a skill you can share:');if(!v?.trim())return;try{await api('student_skills',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'resolution=ignore-duplicates'},body:JSON.stringify({student_id:student.id,skill:v.trim()})});note('Skill added.');load()}catch(e){note('Could not add skill.')}});document.querySelector('#addInterest').addEventListener('click',async()=>{const v=prompt('Add an interest:');if(!v?.trim())return;try{await api('student_interests',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'resolution=ignore-duplicates'},body:JSON.stringify({student_id:student.id,interest:v.trim()})});note('Interest added.');load()}catch(e){note('Could not add interest.')}});
+async function savePrefs(){try{const body={student_id:student.id,email_notifications:document.querySelector('#prefEmail').checked,marketplace_alerts:document.querySelector('#prefMarket').checked,skill_suggestions:document.querySelector('#prefSkills').checked,updated_at:new Date().toISOString()};await api('student_preferences',{method:'POST',headers:{'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify(body)});note('Preferences saved.')}catch(e){note('Could not save preferences.')}}document.querySelectorAll('#prefEmail,#prefMarket,#prefSkills').forEach(x=>x.addEventListener('change',savePrefs));
+document.querySelector('#read').addEventListener('click',async()=>{try{await api(`notifications?student_id=eq.${encodeURIComponent(student.id)}&is_read=eq.false`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({is_read:true})});note('All notifications marked as read.');load()}catch(e){note('Could not update notifications.')}});
+document.querySelector('#logout').addEventListener('click',()=>{localStorage.removeItem('cc_session');location.href='portal.html'});document.querySelector('#logoutTop').addEventListener('click',()=>{localStorage.removeItem('cc_session');location.href='portal.html'});document.querySelector('#profileTarget').addEventListener('input',renderAttendance);document.querySelector('#pAttend').addEventListener('input',()=>selected>=0&&compute(rows[selected]));document.querySelector('#pMiss').addEventListener('input',()=>selected>=0&&compute(rows[selected]));document.querySelectorAll('.reveal').forEach(el=>new IntersectionObserver(es=>es.forEach(x=>x.isIntersecting&&x.target.classList.add('visible')),{threshold:.05}).observe(el));show(requested||'overview');load();
