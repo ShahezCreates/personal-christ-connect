@@ -32,3 +32,18 @@ function initThree(){
   };document.head.appendChild(script);
 }
 initThree();
+
+
+window.CC_AUTH_READY?.then(({session})=>{
+  document.querySelectorAll('[data-auth-link="dashboard"]').forEach(link=>{
+    if(session){ link.href='dashboard.html'; link.innerHTML='My student space <span>→</span>'; }
+  });
+  document.querySelectorAll('[data-auth-only]').forEach(el=>el.hidden=!session);
+}).catch(()=>{});
+
+// Richer scroll choreography for sections that are intentionally story-like.
+const storySections=[...document.querySelectorAll('.story-panel,.scrolly-chapter,.image-story,.club-story,.campus-pulse,.dining-preview')];
+const storyObs=new IntersectionObserver(entries=>entries.forEach(entry=>{
+  entry.target.classList.toggle('story-active', entry.isIntersecting);
+}),{threshold:.18});
+storySections.forEach(s=>storyObs.observe(s));

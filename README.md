@@ -64,3 +64,12 @@ The provisioning function expects the `CHRIST_CONNECT_ADMIN_SECRET` secret. Supa
 ## Note on official data
 
 The project contains demo events, clubs and attendance values only. Replace them with legitimate university-provided data before treating any result as official.
+
+
+## V3 additions
+- Persistent Supabase Auth session across tabs/browser revisits.
+- Delhi NCR dining pre-order flow: `canteen.html`.
+- Run `supabase/upgrade_v3.sql` after the existing schema/upgrade.
+- Delhi NCR-only organization/school directory data.
+- Generic photography providers were removed from the active landing/login UI; active photography points to Delhi NCR campus gallery images.
+- Existing Edge Functions are intentionally unchanged.

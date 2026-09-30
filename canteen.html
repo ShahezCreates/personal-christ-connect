@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Canteen Pre-order · Christ Connect Delhi NCR</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="canteen.css">
+</head>
+<body data-private="true" class="canteen-body">
+<header class="canteen-top glass"><a class="brand" href="dashboard.html"><span>C</span> CHRIST CONNECT</a><div><a href="dashboard.html">My space</a><a href="index.html">Campus</a></div></header>
+<main class="canteen-wrap">
+<section class="canteen-hero reveal"><div><p class="eyebrow">DELHI NCR · CAMPUS DINING</p><h1>Order before the <em>queue.</em></h1><p>Choose a dining outlet, build your order, pick a pickup slot, and get a live order code. Official outlet names are based on CHRIST Delhi NCR's current Dining Facilities page; demo menu prices are placeholders.</p></div><div class="canteen-image"><img src="https://farm66.staticflickr.com/65535/55163416816_7131865ee3_b.jpg" alt="CHRIST Delhi NCR campus"></div></section>
+<section class="shop-strip reveal" id="shopStrip"></section>
+<section class="order-layout">
+<div><div class="section-title"><div><p class="eyebrow">01 · MENU</p><h2 id="shopTitle">Select an outlet.</h2></div><span class="tiny-note">Demo prices · prototype data</span></div><div id="menuGrid" class="menu-grid"></div></div>
+<aside class="order-panel glass"><p class="eyebrow">02 · YOUR PRE-ORDER</p><div id="cartItems" class="cart-items"><div class="empty-cart">Nothing here yet.</div></div><div class="order-total"><span>Total</span><strong id="cartTotal">₹0</strong></div><div class="pickup"><label>Pickup date<input id="pickupDate" type="date"></label><label>Pickup slot<select id="pickupSlot"><option>11:30 AM</option><option>12:00 PM</option><option selected>12:30 PM</option><option>1:00 PM</option><option>1:30 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></label><label>Notes<textarea id="orderNotes" rows="3" placeholder="Less spicy, no onion, pickup detail…"></textarea></label></div><button class="place-btn" id="placeOrder">Place pre-order →</button><p class="order-message" id="orderMessage"></p></aside>
+</section>
+<section class="orders-history reveal"><div class="section-title"><div><p class="eyebrow">03 · HISTORY</p><h2>Your <em>orders.</em></h2></div><a href="my-orders.html">Open full history →</a></div><div id="orderHistory" class="history-grid"></div></section>
+</main>
+<div class="toast" id="toast"></div>
+<script src="config.js"></script><script src="auth.js"></script><script src="canteen.js"></script>
+</body></html>

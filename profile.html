@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="profile.css">
 </head>
-<body>
+<body data-private="true">
 <header class="glass-head"><a class="brand" href="dashboard.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><div><a href="dashboard.html">← Dashboard</a><button id="logoutTop">Sign out</button></div></header>
 <main>
 <section class="profile-hero reveal"><div class="avatar-wrap"><div class="avatar" id="avatar">CC</div><span class="online-dot"></span></div><div class="hero-copy"><p class="eyebrow">STUDENT ACCOUNT</p><h1 id="name">Student</h1><small id="meta">Loading profile…</small><div class="hero-pills"><span id="heroStatus">ACTIVE</span><span>Delhi NCR · Mariam Nagar</span></div></div><button class="outline" id="edit">Edit profile</button></section>
@@ -38,5 +38,5 @@
 <article id="notifications" class="panel"><div class="head"><div><p class="eyebrow">UPDATES</p><h2>Notifications.</h2></div><button id="read">Mark all read</button></div><ul class="activity notices" id="notificationsList"><li>✦ <span><b>Loading your notifications…</b><small>Supabase</small></span></li></ul></article>
 <article id="settings" class="panel"><p class="eyebrow">PREFERENCES</p><h2>Settings.</h2><div class="settings"><label><span><b>Email notifications</b><small>Updates about events and your account</small></span><input id="prefEmail" type="checkbox"></label><label><span><b>Marketplace alerts</b><small>Offers, messages and wishlist updates</small></span><input id="prefMarket" type="checkbox"></label><label><span><b>Skill-match suggestions</b><small>Recommended peer-learning opportunities</small></span><input id="prefSkills" type="checkbox"></label></div><button class="danger" id="logout">Sign out of Christ Connect</button></article>
 </section></div>
-</main><div id="toast" role="status"></div><script src="config.js"></script><script src="profile.js"></script>
+</main><div id="toast" role="status"></div><script src="config.js"></script><script src="auth.js"></script><script src="profile.js"></script>
 </body></html>
