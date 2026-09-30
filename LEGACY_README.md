@@ -1,27 +1,75 @@
-# Christ Connect
+# Christ Connect · Delhi NCR Deluxe V2
 
-College portal frontend with an Express and MongoDB REST API.
+A full static frontend + Supabase-backed private student portal based on the original Christ Connect build.
 
-## Run locally
+## What's included
 
-1. Install Node.js 20+ and run `npm install`.
-2. Copy `.env.example` to `.env` and provide a MongoDB Atlas connection string and a long JWT secret.
-3. Run `npm run dev`.
+- Restored original Christ Connect feature pages: events, workshops, hackathons, competitions, guest lectures, cultural fests, sports, department events, club events, calendar, countdown, skill exchange, marketplace, lost & found, community, campus guide, rewards, notifications, admin dashboard, profile/account surfaces, and all the original supporting pages.
+- Redesigned public landing page with the original cream / dark-teal / coral / green / yellow palette, scroll storytelling, parallax, glassmorphism, neumorphism, responsive layouts, local SVG visuals, and an optional Three.js interactive campus scene.
+- Supabase-backed registration-number login using Supabase Auth.
+- Private student dashboard and profile that read authenticated data from Postgres using RLS.
+- Subject-wise attendance dashboard and what-if calculator:
+  - current percentage
+  - percentage after attending N future classes
+  - percentage after missing N future classes
+  - percentage-point gain/loss
+  - number of classes that can be missed while staying at target
+  - number of classes needed to reach target
+- Profile skills, interests and notification preferences stored in Postgres.
 
-The API is served at `http://localhost:5000`. Check it with `GET /api/health`.
+## Current Supabase setup
 
-## API overview
+The existing login/provisioning functions from the working project are preserved under `supabase/functions/`.
 
-| Resource | Public operations | Protected operations |
-| --- | --- | --- |
-| `/api/auth` | `POST /register`, `POST /login` | `GET /me` |
-| `/api/courses` | `GET /`, `GET /:id` | teachers/admins create or edit; admins delete |
-| `/api/notices` | `GET /` | teachers/admins manage their notices; admins manage all |
-| `/api/events` | `GET /?upcoming=true` | teachers/admins manage their events; admins manage all |
-| `/api/assignments` | — | teachers/admins create; students upload PDF submissions |
+For a project that already has the base schema, run `supabase/upgrade_v2.sql` once. It adds the attendance/profile enhancements and demo data for `DEMO2026BCA001` only.
 
-Pass `Authorization: Bearer <token>` for protected endpoints. Public registration always creates a `student` account. Promote trusted staff to `teacher` or `admin` directly in MongoDB; roles are deliberately not accepted during registration.
+For a new project, run `supabase/schema.sql`, then `supabase/upgrade_v2.sql`.
 
-## Deployment
+Do not put a service-role or secret key in `config.js`.
 
-Set `MONGODB_URI`, `JWT_SECRET`, `CLIENT_ORIGIN`, and `PORT` in Render, Railway, or another Node hosting provider. The `uploads/` directory is suitable for local development; use cloud object storage before production deployment because hosted local disks are usually ephemeral.
+## Local testing
+
+Open the folder in VS Code and run:
+
+```powershell
+python -m http.server 5500
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5500/
+```
+
+Use a provisioned student account. The demo account created by the included admin workflow is:
+
+```text
+Registration: DEMO2026BCA001
+Password: DemoPass!2026
+```
+
+These values are demo credentials, not official university credentials.
+
+## Supabase functions
+
+Deploy from the project root:
+
+```powershell
+supabase functions deploy login-with-registration
+supabase functions deploy provision-student --no-verify-jwt
+```
+
+The provisioning function expects the `CHRIST_CONNECT_ADMIN_SECRET` secret. Supabase-provided `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` values are consumed server-side by the Edge Function and must not be copied into browser code.
+
+## Note on official data
+
+The project contains demo events, clubs and attendance values only. Replace them with legitimate university-provided data before treating any result as official.
+
+
+## V3 additions
+- Persistent Supabase Auth session across tabs/browser revisits.
+- Delhi NCR dining pre-order flow: `canteen.html`.
+- Run `supabase/upgrade_v3.sql` after the existing schema/upgrade.
+- Delhi NCR-only organization/school directory data.
+- Generic photography providers were removed from the active landing/login UI; active photography points to Delhi NCR campus gallery images.
+- Existing Edge Functions are intentionally unchanged.

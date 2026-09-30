@@ -1,41 +1,10 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Student Dashboard · Christ Connect</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="dashboard.css">
-</head>
-<body class="dashboard-body" data-private="true">
-<header class="dash-top glass"><a class="brand" href="index.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><div class="dash-actions"><a href="index.html">Home</a><a class="profile-link" href="profile.html"><span id="headAvatar">CC</span> Profile</a><button id="logout">Sign out</button></div></header>
-<main>
-<section class="dash-hero reveal"><div><p class="eyebrow">PRIVATE STUDENT SPACE · DELHI NCR</p><h1 id="greeting">Welcome back.</h1><p id="subline">Your personal campus command centre.</p><div class="identity-line"><span id="heroReg">Registration —</span><span id="heroProgram">Programme —</span><span>Shaheed Sthal NBA Metro nearby</span></div></div><div class="hero-orb"><div class="orb-inner">CC</div><span class="orbit-ring one"></span><span class="orbit-ring two"></span></div></section>
-
-<section class="stats reveal">
-<article><span>OVERALL ATTENDANCE</span><strong id="attendance">—</strong><small id="attendanceLabel">Connect your attendance data</small></article>
-<article><span>EVENTS</span><strong id="eventsCount">—</strong><small>registered</small></article>
-<article><span>CLUBS</span><strong id="clubsCount">—</strong><small>joined</small></article>
-<article><span>UNREAD</span><strong id="noticeCount">—</strong><small>notifications</small></article>
-</section>
-
-<section class="attendance-focus reveal" id="attendanceSection">
-<div class="section-head"><div><p class="eyebrow">ATTENDANCE INTELLIGENCE</p><h2>Know exactly where you <em>stand.</em></h2><p>See subject-wise attendance and simulate the effect of attending or missing future classes.</p></div><div class="target-card"><label for="targetPercent">Target attendance</label><div><input id="targetPercent" type="number" min="1" max="99" value="75"><span>%</span></div></div></div>
-<div class="attendance-grid" id="attendanceGrid"><div class="loading-card">Loading your subjects…</div></div>
-<div class="calculator glass-card" id="calculator" hidden>
-<div><p class="eyebrow">WHAT-IF CALCULATOR</p><h3 id="calcTitle">Attendance planner</h3><p id="calcSummary">Select a subject above.</p></div>
-<div class="calc-controls"><label>Attend next <input id="futureAttend" type="number" min="0" value="1"> classes</label><label>Miss next <input id="futureMiss" type="number" min="0" value="1"> classes</label></div>
-<div class="calc-results"><div><span>After attending</span><b id="afterAttend">—</b><small id="attendDelta">—</small></div><div><span>After missing</span><b id="afterMiss">—</b><small id="missDelta">—</small></div><div><span>Can miss before target</span><b id="canMiss">—</b><small>classes</small></div><div><span>Needed to reach target</span><b id="needAttend">—</b><small>classes</small></div></div>
-</div>
-</section>
-
-<section class="dashboard-grid reveal">
-<article class="panel wide"><div class="panel-head"><div><p class="eyebrow">YOUR CAMPUS</p><h2>Upcoming <em>plans.</em></h2></div><a href="events.html">Open calendar →</a></div><div id="eventsList" class="list">Loading your events…</div></article>
-<article class="panel"><div class="panel-head"><div><p class="eyebrow">YOUR PROFILE</p><h2 id="studentName">Student</h2></div><a href="profile.html">Open →</a></div><p class="course-line" id="studentCourse">Loading…</p><div class="profile-meta"><div><span>REGISTRATION</span><b id="profileReg">—</b></div><div><span>STATUS</span><b id="profileStatus">—</b></div><div><span>BATCH</span><b id="profileBatch">—</b></div></div><div class="meter"><i id="profileMeter"></i></div><small id="profileHint">Loading profile completeness…</small></article>
-<article class="panel"><div class="panel-head"><div><p class="eyebrow">YOUR UPDATES</p><h2>Notifications.</h2></div><a href="notifications-center.html">View all →</a></div><div id="notifications" class="list">Loading…</div></article>
-</section>
-
-<section class="quick-dock reveal"><div><p class="eyebrow">EVERYTHING ELSE</p><h2>Open the original <em>Christ Connect</em> tools.</h2></div><div class="quick-links"><a href="canteen.html">Canteen preorder</a><a href="calendar-view.html">Calendar</a><a href="clubs-joined.html">Clubs</a><a href="skill-exchange.html">Skill exchange</a><a href="marketplace.html">Marketplace</a><a href="lost-found.html">Lost & Found</a><a href="community.html">Community</a><a href="campus-guide.html">Campus guide</a><a href="rewards.html">Rewards</a><a href="my-orders.html">My orders</a><a href="settings.html">Settings</a></div></section>
-</main>
-<script src="config.js"></script><script src="auth.js"></script><script src="dashboard.js"></script>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Space · Christ Connect Delhi NCR</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="deluxe.css"></head>
+<body class="private-body"><header class="private-nav glass"><a class="brand" href="index.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><div class="actions"><a href="index.html">Campus</a><a href="profile.html">Profile</a><a href="canteen.html">Canteen</a><button id="logout">Sign out</button></div></header>
+<main class="student-wrap">
+<section class="student-hero"><div class="reveal"><p class="eyebrow">PRIVATE STUDENT SPACE · DELHI NCR</p><h1 id="greeting">Welcome <em>back.</em></h1><p id="subline">Your student life, connected to the data that belongs to you.</p><div class="identity-pills"><span class="data-chip" id="heroReg">Registration —</span><span class="data-chip" id="heroProgramme">Programme —</span><span class="data-chip">Mariam Nagar · Ghaziabad</span></div></div><div class="student-orbit reveal tilt"><div class="core" id="heroInitials">CC</div><span class="ring"></span><span class="ring two"></span></div></section>
+<section class="stat-grid reveal"><article class="stat-card"><span>OVERALL ATTENDANCE</span><strong id="overall">—</strong><small id="overallMeta">Loading…</small></article><article class="stat-card"><span>EVENTS</span><strong id="eventCount">—</strong><small>registered</small></article><article class="stat-card"><span>CLUBS</span><strong id="clubCount">—</strong><small>joined</small></article><article class="stat-card"><span>NOTIFICATIONS</span><strong id="noticeCount">—</strong><small>unread</small></article></section>
+<section class="panel-section"><div class="panel-section-head reveal"><div><p class="eyebrow">01 · ATTENDANCE INTELLIGENCE</p><h2>Don’t guess your <em>percentage.</em></h2></div><p>Choose a subject to see how many classes you can miss, how your percentage changes after attending future classes, and how many classes are needed to reach your target.</p></div><div id="attendanceGrid" class="attendance-grid-live"></div><div id="attendanceTools" class="attendance-tools reveal" hidden><div><p class="eyebrow">WHAT-IF PLANNER</p><h3 id="calcTitle">Select a subject</h3><p id="calcSummary" class="muted">—</p><div class="calc-controls"><label>Target %<input id="target" type="number" min="1" max="99" value="75"></label><label>Attend next<input id="futureAttend" type="number" min="0" value="1"></label><label>Miss next<input id="futureMiss" type="number" min="0" value="1"></label></div></div><div class="calc-results-live"><div><span>After attending</span><b id="afterAttend">—</b><small id="attendDelta">—</small></div><div><span>After missing</span><b id="afterMiss">—</b><small id="missDelta">—</small></div><div><span>Can safely miss</span><b id="canMiss">—</b><small>classes</small></div><div><span>Need to reach target</span><b id="needAttend">—</b><small>classes</small></div></div></div></section>
+<section class="panel-section two-col"><article class="student-card reveal"><div class="panel-section-head"><div><p class="eyebrow">02 · IDENTITY</p><h2 id="studentName">Your <em>profile.</em></h2></div><a class="btn" href="profile.html">Open profile →</a></div><div class="data-list"><div class="data-row"><small>University email</small><b id="studentEmail">—</b></div><div class="data-row"><small>School</small><b id="studentSchool">—</b></div><div class="data-row"><small>Department</small><b id="studentDepartment">—</b></div><div class="data-row"><small>Status</small><b id="studentStatus">—</b></div></div></article><article class="student-card reveal"><div class="panel-section-head"><div><p class="eyebrow">03 · QUICK ACTIONS</p><h2>Campus <em>tools.</em></h2></div></div><div class="feature-wall"><a href="canteen.html"><b>Pre-order</b><small>Any dining outlet · prepaid receipt</small></a><a href="lost-found.html"><b>Lost & Found</b><small>Report, search and claim</small></a><a href="calendar-view.html"><b>Calendar</b><small>Academic + campus dates</small></a><a href="campus-guide.html"><b>Navigate</b><small>Map, blocks and metro</small></a></div></article></section>
+<section class="panel-section"><div class="panel-section-head reveal"><div><p class="eyebrow">04 · YOUR CAMPUS SIGNAL</p><h2>Recent <em>updates.</em></h2></div><a class="btn" href="notifications-center.html">All notifications →</a></div><div class="student-card reveal" id="notifications">Loading notifications…</div></section>
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="auth.js"></script><script src="campus-data.js"></script><script src="deluxe.js"></script><script src="dashboard.js"></script>
 </body></html>

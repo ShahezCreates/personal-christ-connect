@@ -1,15 +1,1 @@
-<!doctype html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Department · Christ Connect</title>
-    <link rel="stylesheet" href="account-section.css">
-</head>
-
-<body data-section="department" data-private="true">
-    <script src="config.js"></script><script src="auth.js"></script><script src="account-section.js"></script>
-</body>
-
-</html> 
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Delhi NCR Academics · Christ Connect</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="deluxe.css"></head><body class="private-body"><header class="private-nav glass"><a class="brand" href="index.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><div class="actions"><a href="dashboard.html">My space</a><a href="profile.html">Profile</a><button id="logout">Sign out</button></div></header><main class="canteen-wrap"><section class="lf-hero reveal"><p class="eyebrow">DELHI NCR · ACADEMICS</p><h1>Schools, departments<br><em>and the sciences.</em></h1><p>The public Delhi NCR academic structure, with the School of Sciences kept front and centre.</p></section><div id="departments" class="school-grid"></div><section class="panel-section reveal"><div class="panel-section-head"><div><p class="eyebrow">OFFICIAL ACADEMICS</p><h2>Seven <em>schools.</em></h2></div><a class="btn primary" href="https://ncr.christuniversity.in/academics" target="_blank" rel="noreferrer">University academics ↗</a></div><div class="school-grid" id="schools"></div></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script><script src="auth.js"></script><script src="campus-data.js"></script><script src="deluxe.js"></script><script>const d=CC_CAMPUS;document.querySelector('#departments').innerHTML=d.departments.map((x,i)=>`<article class="school-card ${x.priority?'featured':''} reveal"><span>0${i+1}</span><div><small>${x.school}</small><h3>${x.name}</h3><p>${x.desc}</p></div><b>→</b></article>`).join('');document.querySelector('#schools').innerHTML=d.schools.map(x=>`<article class="school-card reveal"><span>•</span><div><small>${x[2].toUpperCase()}</small><h3>${x[0]}</h3><p>${x[1]}</p></div></article>`).join('');CC_AUTH.requireAuth();document.querySelector('#logout').onclick=()=>CC_AUTH.signOut();</script></body></html>
