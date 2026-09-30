@@ -13,16 +13,35 @@ form.addEventListener("submit", async (e) => {
     const c = window.CHRIST_CONNECT_CONFIG;
     if (!c || c.SUPABASE_URL.includes("YOUR_PROJECT"))
       throw new Error("config");
-    const r = await fetch(
-      `${c.SUPABASE_URL}/functions/v1/login-with-registration`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ registrationNumber, password }),
-      },
+   const r = await fetch(`${c.SUPABASE_URL}/functions/v1/login-with-registration`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        registrationNumber,
+        password
+    })
+});
+
+const raw = await r.text();
+
+console.log("LOGIN HTTP STATUS:", r.status);
+console.log("LOGIN RAW RESPONSE:", raw);
+
+let data;
+
+try {
+    data = JSON.parse(raw);
+} catch {
+    data = { error: raw };
+}
+
+if (!r.ok) {
+    throw new Error(
+        `HTTP ${r.status}: ${data.error || data.message || raw || 'Unknown error'}`
     );
-    const data = await r.json();
-    if (!r.ok) throw new Error(data.error || "Login failed");
+}
     localStorage.setItem("cc_session", JSON.stringify(data.session));
     window.location.href = "dashboard.html";
   } catch(err) {
