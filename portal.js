@@ -25,10 +25,12 @@ form.addEventListener("submit", async (e) => {
     if (!r.ok) throw new Error(data.error || "Login failed");
     localStorage.setItem("cc_session", JSON.stringify(data.session));
     window.location.href = "dashboard.html";
-  } catch (err) {
+  } catch(err) {
+    console.error("CHRIST CONNECT LOGIN ERROR:", err);
+
     message.textContent =
-      err.message === "config"
-        ? "Add your Supabase URL and publishable key to config.js first."
-        : "Invalid registration number or password, or the login service is not deployed.";
-  }
+        "LOGIN DEBUG: " + (err?.message || String(err));
+
+    console.error("Full error:", err);
+}
 });
