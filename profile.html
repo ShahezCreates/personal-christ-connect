@@ -1,1 +1,80 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Profile · Christ Connect</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="profile.css"></head><body><header><a class="brand" href="dashboard.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><a href="dashboard.html">← Dashboard</a></header><main><section class="hero"><div class="avatar" id="avatar">CC</div><div><p class="eyebrow">STUDENT ACCOUNT</p><h1 id="name">Student</h1><p id="meta">Loading profile…</p></div></section><section class="cards"><article><p class="eyebrow">IDENTITY</p><h2>Basic details</h2><dl><dt>Registration number</dt><dd id="reg">—</dd><dt>University email</dt><dd id="email">—</dd><dt>Status</dt><dd id="status">—</dd></dl></article><article><p class="eyebrow">ACADEMICS</p><h2>Programme</h2><dl><dt>School</dt><dd id="school">—</dd><dt>Department</dt><dd id="department">—</dd><dt>Programme</dt><dd id="programme">—</dd><dt>Batch</dt><dd id="batch">—</dd></dl></article><article><p class="eyebrow">ABOUT</p><h2>Your space</h2><p id="bio">Add a short bio later from the connected profile editor.</p><a href="dashboard.html">Back to dashboard →</a></article></section></main><script src="config.js"></script><script src="profile.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>My Profile · Christ Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <header>
+    <a class="brand" href="dashboard.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a>
+    <div class="profile-head-actions"><a href="dashboard.html">← Dashboard</a><button id="logoutTop">Sign out</button></div>
+  </header>
+  <main>
+    <section class="hero reveal">
+      <div class="avatar" id="avatar">CC<span class="avatar-status"></span></div>
+      <div class="hero-copy"><p>STUDENT ACCOUNT</p><h1 id="name">Student</h1><small id="meta">Loading profile…</small><div class="hero-pills"><span id="heroStatus">ACTIVE</span><span id="heroCampus">Delhi NCR</span></div></div>
+      <button class="outline" id="edit">Edit profile</button>
+    </section>
+    <div class="profile-layout">
+      <aside class="profile-nav" aria-label="Profile navigation">
+        <b>MY ACCOUNT</b>
+        <button class="active" data-tab="overview">Overview</button><button data-tab="details">Basic details</button><button data-tab="academic">Department & year</button><button data-tab="skills">Skills & interests</button><button data-tab="clubs">Clubs joined</button><button data-tab="events">Saved events</button>
+        <b>MY ACTIVITY</b>
+        <button data-tab="orders">My orders</button><button data-tab="listings">My listings</button><button data-tab="lost">My lost & found items</button><button data-tab="wishlist">Wishlist</button>
+        <b>PREFERENCES</b>
+        <button data-tab="notifications">Notifications <i id="notificationBadge">0</i></button><button data-tab="settings">Settings</button>
+      </aside>
+      <section class="content">
+        <article id="overview" class="panel active reveal">
+          <div class="head"><div><p>YOUR SPACE</p><h2>At a <em>glance.</em></h2></div><button data-go="details">Edit details</button></div>
+          <div class="cards">
+            <div class="progress"><strong id="profileComplete">0%</strong><b>Profile complete</b><small id="profileCompleteText">Loading your student profile.</small><button data-go="skills">Complete profile →</button></div>
+            <div><span>◌</span><b id="clubsSummary">0 clubs joined</b><small id="clubsSummaryText">Loading communities.</small><button data-go="clubs">View clubs →</button></div>
+            <div><span>◫</span><b id="eventsSummary">0 events saved</b><small id="eventsSummaryText">Loading events.</small><button data-go="events">Open events →</button></div>
+          </div>
+          <h3>Recent activity</h3>
+          <ul class="activity" id="recentActivity"><li>✦ <span><b>Loading your recent activity…</b><small>Supabase</small></span></li></ul>
+        </article>
+
+        <article id="details" class="panel reveal">
+          <div class="head"><div><p>YOUR IDENTITY</p><h2>Basic <em>details.</em></h2></div></div>
+          <form id="profileForm">
+            <label>Full name<input id="fullNameInput" disabled></label>
+            <label>University email<input id="emailInput" disabled></label>
+            <label>Registration number<input id="regInput" disabled></label>
+            <label>Campus<input value="Delhi NCR · Mariam Nagar" disabled></label>
+            <label class="wide">About me<textarea id="bioInput" disabled placeholder="Tell the campus a little about you."></textarea></label>
+            <button type="button" id="save">Save changes</button>
+          </form>
+          <p class="micro-note">Authentication and registration number remain controlled by the student account system.</p>
+        </article>
+
+        <article id="academic" class="panel reveal"><div class="head"><div><p>ACADEMICS</p><h2>Department & <em>year.</em></h2></div></div><div class="tiles"><div><small>SCHOOL</small><b id="school">—</b><p>Academic school</p></div><div><small>DEPARTMENT</small><b id="department">—</b><p>Department</p></div><div><small>PROGRAMME</small><b id="programme">—</b><p>Programme</p></div><div><small>BATCH</small><b id="batch">—</b><p>Expected graduation can be inferred after official programme data is provided.</p></div></div></article>
+
+        <article id="skills" class="panel reveal"><div class="head"><div><p>YOUR INTERESTS</p><h2>Skills & <em>interests.</em></h2></div><button id="addSkill">Add skill +</button></div><h3>Skills I can share</h3><div class="tags" id="skillTags"></div><h3>Things I’m into</h3><div class="tags pink" id="interestTags"></div><p class="micro-note">These personal preference chips are stored locally until a dedicated preference table is enabled in the backend.</p></article>
+
+        <article id="clubs" class="panel reveal"><div class="head"><div><p>COMMUNITIES</p><h2>Clubs <em>joined.</em></h2></div><a class="outline" href="index.html#clubs">Discover clubs</a></div><div class="items" id="clubItems"><div><span class="orb">◌</span><p><b>Loading clubs…</b><small>Supabase</small></p></div></div></article>
+
+        <article id="events" class="panel reveal"><div class="head"><div><p>YOUR PLANS</p><h2>Saved <em>events.</em></h2></div><a class="outline" href="events.html">Explore events</a></div><div class="items" id="eventItems"><div><span class="orb yellow">◫</span><p><b>Loading events…</b><small>Supabase</small></p></div></div></article>
+
+        <article id="orders" class="panel empty reveal"><span>▤</span><h2>My <em>orders.</em></h2><p id="ordersText">Loading canteen and marketplace history…</p><a href="my-orders.html">Open orders →</a></article>
+        <article id="listings" class="panel empty reveal"><span>▱</span><h2>My <em>listings.</em></h2><p>Nothing is listed yet in the current demo profile.</p><a href="my-listings.html">Manage listings →</a></article>
+        <article id="lost" class="panel reveal"><div class="head"><div><p>LOST & FOUND</p><h2>My lost & <em>found items.</em></h2></div><a class="outline" href="lost-found.html">Open Lost & Found</a></div><div class="cards"><div><b>Lost items</b><small>Personal reports can be connected when a dedicated table is enabled.</small></div><div><b>Found items</b><small>Use the full Lost & Found surface to browse campus listings.</small></div></div></article>
+        <article id="wishlist" class="panel reveal"><div class="head"><div><p>MARKETPLACE</p><h2>My <em>wishlist.</em></h2></div></div><div class="items"><div><span class="orb yellow">▤</span><p><b>Engineering Graphics</b><small>Pre-loved · ₹250 · demo wishlist item</small></p><button class="remove" data-local-remove="wishlist">Remove</button></div></div></article>
+
+        <article id="notifications" class="panel reveal"><div class="head"><div><p>UPDATES</p><h2>Notifications.</h2></div><button id="read">Mark all read</button></div><ul class="activity notices" id="notificationsList"><li>✦ <span><b>Loading your notifications…</b><small>Supabase</small></span></li></ul></article>
+
+        <article id="settings" class="panel reveal"><p>PREFERENCES</p><h2>Settings.</h2><div class="settings"><label><span><b>Email notifications</b><small>Updates about events and your account</small></span><input id="prefEmail" type="checkbox" checked></label><label><span><b>Marketplace alerts</b><small>Messages, offers and wishlist updates</small></span><input id="prefMarket" type="checkbox" checked></label><label><span><b>Skill-match suggestions</b><small>Recommended peer-learning opportunities</small></span><input id="prefSkills" type="checkbox"></label></div><button class="danger" id="logout">Sign out of Christ Connect</button></article>
+      </section>
+    </div>
+  </main>
+  <div id="toast" role="status"></div>
+  <script src="config.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

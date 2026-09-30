@@ -1,24 +1,26 @@
-# Christ Connect — Complete Full-Stack Build
+# Christ Connect · Delhi NCR — Deluxe Build
 
-A Delhi NCR campus portal concept rebuilt with scrollytelling, glassmorphism/neumorphism and Supabase-backed authentication/data.
+This build restores the large original Christ Connect feature surface while retaining the working Supabase login/backend from the recent connected version.
 
-## 1. Supabase
-1. Create a Supabase project.
-2. Open SQL Editor and run `supabase/schema.sql`.
-3. Copy Project URL and publishable/anon key into `config.js`.
-4. Install CLI: `npm install -g supabase`
-5. `supabase login`
-6. `supabase link --project-ref YOUR_PROJECT_REF`
-7. Deploy functions:
-   - `supabase functions deploy login-with-registration`
-   - `supabase functions deploy provision-student`
-8. Set the admin secret: `supabase secrets set CHRIST_CONNECT_ADMIN_SECRET=YOUR_SECRET`
+## What changed
+- Original cream / dark-teal / coral palette restored as the primary visual language.
+- More scrollytelling on the public home page: chapter sections, sticky storytelling, progressive reveal, parallax accents and scroll progress.
+- Glassmorphism + neumorphism added without turning the whole site into a dark UI.
+- Nearest metro is shown as **Shaheed Sthal NBA Metro Station**.
+- All original feature HTML pages are restored.
+- The profile page uses the original first-build composition, but reads the logged-in student's data from Supabase.
+- Dashboard, portal login and Supabase Edge Functions are intentionally preserved from the connected build.
 
-## 2. Create a demo student
-Follow `ADMIN_PROVISIONING.md`.
+## Local run
+```powershell
+python -m http.server 5500
+```
+Open `http://127.0.0.1:5500/`.
 
-## 3. Run locally
-From this folder: `python -m http.server 5500` then open `http://localhost:5500`.
+## Supabase
+Do not replace the working `config.js` or the `supabase/` backend files unless you know why. The browser only needs the Supabase URL + publishable/anon key.
 
-## Security
-Passwords are handled by Supabase Auth. The frontend never receives the service-role key. Student-owned tables use RLS. The demo database data is not official university data.
+The provisioning flow remains admin-controlled; real student details should only be loaded from legitimate university-authorized data.
+
+## Demo data
+Events, clubs and some feature-card examples are demo/concept content and must not be presented as official university records.
