@@ -1,1 +1,66 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Login · Christ Connect</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head><body class="portal-body"><main class="login-shell"><a class="brand" href="index.html"><span class="brand-mark">C</span><span>CHRIST<br><b>CONNECT</b></span></a><section class="login-card"><p class="eyebrow">PRIVATE STUDENT PORTAL</p><h1>Your campus,<br><em>in one place.</em></h1><p>Sign in with the registration number and password provisioned for your student account.</p><form id="loginForm" novalidate><label for="registrationNumber">REGISTRATION NUMBER</label><input id="registrationNumber" name="registrationNumber" autocomplete="username" placeholder="e.g. 24BCA10001" required><label for="password">PASSWORD</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Your password" required><button type="submit">Secure sign in →</button><p class="login-message" id="loginMessage" role="status"></p></form><div class="security-note"><b>Secure by design</b><span>Passwords are verified by Supabase Auth. Student tables are protected by PostgreSQL Row Level Security. No password is stored in the frontend.</span></div></section><p class="portal-foot">Need admission information? <a href="https://ncr.christuniversity.in/admission-home" target="_blank">Official admissions ↗</a> · <a href="index.html">Back home</a></p></main><script src="config.js"></script><script src="portal.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Login · Christ Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="portal-body">
+    <main class="login-shell">
+      <a class="brand" href="index.html"
+        ><span class="brand-mark">C</span
+        ><span>CHRIST<br /><b>CONNECT</b></span></a
+      >
+      <section class="login-card">
+        <p class="eyebrow">PRIVATE STUDENT PORTAL</p>
+        <h1>Your campus,<br /><em>in one place.</em></h1>
+        <p>
+          Sign in with the registration number and password provisioned for your
+          student account.
+        </p>
+        <form id="loginForm" novalidate>
+          <label for="registrationNumber">REGISTRATION NUMBER</label
+          ><input
+            id="registrationNumber"
+            name="registrationNumber"
+            autocomplete="username"
+            placeholder="e.g. 24BCA10001"
+            required
+          /><label for="password">PASSWORD</label
+          ><input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Your password"
+            required
+          /><button type="submit">Secure sign in →</button>
+          <p class="login-message" id="loginMessage" role="status"></p>
+        </form>
+        <div class="security-note">
+          <b>Secure by design</b
+          ><span
+            >Passwords are verified by Supabase Auth. Student tables are
+            protected by PostgreSQL Row Level Security. No password is stored in
+            the frontend.</span
+          >
+        </div>
+      </section>
+      <p class="portal-foot">
+        Need admission information?
+        <a href="https://ncr.christuniversity.in/admission-home" target="_blank"
+          >Official admissions ↗</a
+        >
+        · <a href="index.html">Back home</a>
+      </p>
+    </main>
+    <script src="config.js"></script>
+    <script src="portal.js"></script>
+  </body>
+</html>
